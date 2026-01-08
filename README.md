@@ -158,10 +158,7 @@ vms = {
   "debian13-test" = {
     name     = "deb13-test"
     # ... other settings ...
-    extra_config = {
-      "ethernet0.address"     = "00:50:56:28:6E:35"  # From generate_mac.sh
-      "ethernet0.addressType" = "static"
-    }
+    "mac_address"     = "00:50:56:28:6E:35"  # From generate_mac.sh
   }
 }
 ```
@@ -177,18 +174,28 @@ vms = {
   "debian13-test" = {
     name     = "deb13-test"
     # ... other settings ...
-    extra_config = {
-      "serialNumber.key.0" = "VMware-42 15 6d ab c8 9f 7e 00-11 22 33 44 55 66 77 88"
-    }
+    serial_number = "VM-1717SA-SRV" # From generate_sn.sh
   }
 }
 ```
 
-**VMware Serial Number Format**: The serial number must follow the pattern:
+**VMware Serial Number**: 
+
+To be able to use Serial Numbers
+
 ```
-VMware-XX XX XX XX XX XX XX XX-XX XX XX XX XX XX XX XX
+VMware-DEB-B5cz88-PROD
 ```
-Where each `XX` is a hexadecimal pair (space-separated).
+
+You'll to have to set those parameters to your Terraform / Tofu Project ( either in your vsphere-vm modules or root main.tf ).
+
+NB: I ususally used `SMBIOS.use12CharSerialNumber` for my mac VMs.
+
+```hcl
+    "serialNumber.reflectHost"       = "FALSE"
+    "SMBIOS.use12CharSerialNumber"   = "TRUE"
+    "serialNumber"                   = var.serial_number
+```
 
 ---
 
