@@ -2,10 +2,34 @@
 
 The scripts directory contains two utility scripts to generate unique identifiers for VMware virtual machines:
 
+**version**: `0.1.0`
+
 - `generate_mac.sh` - Generates valid VMware MAC addresses
 - `generate_sn.sh` - Generates customizable serial numbers for VM identification
 
 ---
+
+## Context
+
+Even when using Fixed IPs, I like to set DHCP reservations, to ease my life.
+
+I also like to control and manage VMs Serial Numbers and avoid ugly VMWare built random SN. `VMware-42 15 6d ab c8 9f 7e 00-11 22 33 44 55 66 77 88`.
+Using custom Serial Numbers for the VM also Helps defining what usage or stage ( DEV, PROD, TESTS, etc...) in inventory
+
+You can find two utility scripts to generate unique identifiers for VMware virtual machines:
+
+- `generate_mac.sh` - Generates valid VMware MAC addresses
+
+This allows me to define and control what IP a VM will have from start and even before setting up a fixed IP. Usefull to know in advance the IP assigned and manage DNS upward too.
+This script has some options to output MAC addresses in uppper or lowercase, and to set the count of MAC addresses to generate.
+Defaults to VMWare compatible MACs for now, but I plan to add custom/random generation in the future.
+
+- `generate_sn.sh` - Generates customizable serial numbers for VM identification
+
+This script has some options to generate different nomenclatures of SNs.
+You can Set Prefixes or Suffixes like `DEV` or `PROD` in the *Serial Number*, which happens to be most usefull for VM inventory
+
+Refer below to basic usage and Options of both scripts.
 
 ## generate_mac.sh
 
@@ -18,23 +42,79 @@ Generates valid VMware static MAC addresses within the allowed range for manual 
 - VMware static MAC addresses must be in the range: `00:50:56:00:00:00` to `00:50:56:3F:FF:FF`
 - The script ensures all generated MACs comply with VMware requirements
 
+### Options
+
+```bash
+-h, --help            Show help and usage information
+-c, --case TYPE       Character case: upper, lower, both (default: lower)
+                      - upper: Uppercase format (00:50:56:XX:XX:XX)
+                      - lower: Lowercase format (00:50:56:xx:xx:xx) [cloudinit compatible]
+                      - both: Output MAC in both lowercase and uppercase
+-n, --count NUM       Number of MAC addresses to generate (default: 1)
+```
+
 ### Usage
 
 ```bash
-# Generate 1 MAC address (default)
+# Generate 1 MAC address (default, lowercase for cloudinit compatibility)
 ./generate_mac.sh
 
 # Generate multiple MAC addresses
-./generate_mac.sh 5
+./generate_mac.sh -n 5
+
+# Generate MAC addresses in uppercase
+./generate_mac.sh -c upper -n 3
+
+# Generate MAC address in both lowercase and uppercase
+./generate_mac.sh -c both
+
+# Show help
+./generate_mac.sh -h
 ```
 
-### Example Output
+### Examples
+
+#### Basic Usage (Default Settings)
 
 ```bash
-$ ./generate_mac.sh 3
+$ ./generate_mac.sh
+00:50:56:28:6e:35
+```
+
+#### Generate Multiple MAC Addresses
+
+```bash
+$ ./generate_mac.sh -n 3
+00:50:56:28:6e:35
+00:50:56:3b:c1:87
+00:50:56:0e:14:da
+```
+
+#### Generate Uppercase MAC Addresses
+
+```bash
+$ ./generate_mac.sh -c upper -n 2
 00:50:56:28:6E:35
 00:50:56:3B:C1:87
-00:50:56:0E:14:DA
+```
+
+#### Generate MAC Address in Both Cases
+
+```bash
+$ ./generate_mac.sh -c both
+00:50:56:28:6e:35
+00:50:56:28:6E:35
+```
+
+#### Generate Lowercase MAC Addresses (Cloudinit Compatible)
+
+```bash
+$ ./generate_mac.sh -c lower --count 5
+00:50:56:28:6e:35
+00:50:56:3b:c1:87
+00:50:56:0e:14:da
+00:50:56:1a:2b:3c
+00:50:56:4d:5e:6f
 ```
 
 ### Use Cases
@@ -66,7 +146,7 @@ Generates customizable serial numbers for VMware VMs. These serial numbers can b
 
 ### Options
 
-```
+```bash
 -l, --length NUM      Length of random part (default: 6)
 -p, --prefix STR      Prefix string (default: "VM")
 -s, --suffix STR      Suffix string (default: none)
@@ -158,7 +238,7 @@ vms = {
   "debian13-test" = {
     name     = "deb13-test"
     # ... other settings ...
-    "mac_address"     = "00:50:56:28:6E:35"  # From generate_mac.sh
+    "mac_address"     = "00:50:56:28:6e:35"  # From generate_mac.sh (lowercase for cloudinit)
   }
 }
 ```
@@ -183,7 +263,7 @@ vms = {
 
 To be able to use Serial Numbers
 
-```
+```bash
 VMware-DEB-B5cz88-PROD
 ```
 
@@ -211,8 +291,17 @@ NB: I ususally used `SMBIOS.use12CharSerialNumber` for my mac VMs.
 ## Quick Reference
 
 ```bash
-# Generate 5 MAC addresses for new VMs
-./generate_mac.sh 5
+# Generate 5 MAC addresses for new VMs (lowercase, cloudinit compatible)
+./generate_mac.sh -n 5
+
+# Generate uppercase MAC addresses
+./generate_mac.sh -c upper -n 3
+
+# Generate MAC address in both cases
+./generate_mac.sh -c both
+
+# View all MAC generation options
+./generate_mac.sh --help
 
 # Generate serial numbers for Debian production VMs
 ./generate_sn.sh -p "DEB" -l 6 -s "PROD" -c upper -n 5
@@ -220,6 +309,6 @@ NB: I ususally used `SMBIOS.use12CharSerialNumber` for my mac VMs.
 # Generate serial numbers for test environment (compact format)
 ./generate_sn.sh -p "TST" -l 8 --no-delimiter -n 3
 
-# View all options
+# View all serial number options
 ./generate_sn.sh --help
 ```
