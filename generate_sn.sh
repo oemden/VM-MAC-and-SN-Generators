@@ -1,8 +1,8 @@
 #!/bin/bash
 # Generate custom serial numbers for VMware VMs
-# v0.1.0: Added CLI options (-h, -c, -n) to generate_mac.sh
+# v0.2.0: Added CLI options (-d, --delimiter) to generate_mac.sh
 
-version="0.1.0"
+version="0.2.0"
 
 show_help() {
     cat << EOF

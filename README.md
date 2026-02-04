@@ -2,7 +2,7 @@
 
 The scripts directory contains two utility scripts to generate unique identifiers for VMware virtual machines:
 
-**version**: `0.1.0`
+**version**: `0.2.0`
 
 - `generate_mac.sh` - Generates valid VMware MAC addresses
 - `generate_sn.sh` - Generates customizable serial numbers for VM identification
@@ -51,6 +51,7 @@ Generates valid VMware static MAC addresses within the allowed range for manual 
                       - lower: Lowercase format (00:50:56:xx:xx:xx) [cloudinit compatible]
                       - both: Output MAC in both lowercase and uppercase
 -n, --count NUM       Number of MAC addresses to generate (default: 1)
+-d, --delimiter DELIM Delimiter between MAC octets (single character or 'none', default: ':')
 ```
 
 ### Usage
@@ -67,6 +68,12 @@ Generates valid VMware static MAC addresses within the allowed range for manual 
 
 # Generate MAC address in both lowercase and uppercase
 ./generate_mac.sh -c both
+
+# Generate MAC addresses with a custom delimiter between octets
+./generate_mac.sh -d '-'
+
+# Generate MAC addresses without delimiters between octets
+./generate_mac.sh -d none
 
 # Show help
 ./generate_mac.sh -h
@@ -115,6 +122,23 @@ $ ./generate_mac.sh -c lower --count 5
 00:50:56:0e:14:da
 00:50:56:1a:2b:3c
 00:50:56:4d:5e:6f
+```
+
+#### Custom Delimiter Between MAC Octets
+
+```bash
+# Use dash '-' as delimiter between MAC octets
+$ ./generate_mac.sh -d '-'
+00-50-56-28-6e-35
+
+# Use dot '.' as delimiter between MAC octets
+$ ./generate_mac.sh -d '.' -n 2
+00.50.56.28.6E.35
+00.50.56.3B.C1.87
+
+# No delimiters between MAC octets (compact format)
+$ ./generate_mac.sh -d none
+005056286e35
 ```
 
 ### Use Cases

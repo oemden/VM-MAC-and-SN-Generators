@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2026-02-04
+
+### Added - generate_mac.sh
+
+- Added `-d, --delimiter` option to control the delimiter between MAC address octets
+- Added validation for delimiter values (single character or `none` for no delimiter)
+
+### Documentation
+
+- Updated `generate_mac.sh` help text with delimiter option description and examples
+- Updated `README.md` to document the delimiter option and provide usage examples
+- Marked the corresponding TODO item for the delimiter feature as completed
+
 ## [0.1.0] - 2024-12-19
 
 ### Added - generate_mac.sh

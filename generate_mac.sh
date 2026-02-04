@@ -1,9 +1,9 @@
 #!/bin/bash
 # Generate valid VMware static MAC addresses
 # Valid range: 00:50:56:00:00:00 to 00:50:56:3F:FF:FF
-# v0.1.0: Added CLI options (-h, -c, -n) to generate_mac.sh
+# v0.2.0: Added CLI options (-d, --delimiter) to generate_mac.sh
 
-version="0.1.0"
+version="0.2.0"
 
 # Display help and usage information
 show_help() {
@@ -19,6 +19,7 @@ OPTIONS:
                          - lower: Lowercase format (00:50:56:xx:xx:xx) [cloudinit compatible]
                          - both: Output MAC in both lowercase and uppercase
     -n, --count NUM       Number of MAC addresses to generate (default: 1)
+    -d, --delimiter DELIM Delimiter between MAC octets (single character or 'none', default: ':')
 
 EXAMPLES:
     $0
@@ -36,12 +37,22 @@ EXAMPLES:
     $0 --case lower --count 5
     # Output: 5 MAC addresses in lowercase
 
+    $0 -d '-'
+    # Output: 00-50-56-28-6e-35 (dash delimiter)
+
+    $0 -d '.' -n 2
+    # Output: 2 MAC addresses using '.' as delimiter
+
+    $0 -d none
+    # Output: 005056286e35 (no delimiters between octets)
+
 EOF
 }
 
 # Default values
 CASE="lower"
 COUNT=1
+DELIM=":"
 
 # Parse command-line arguments
 while [[ $# -gt 0 ]]; do
@@ -52,6 +63,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         -c|--case)
             CASE="$2"
+            shift 2
+            ;;
+        -d|--delimiter)
+            DELIM="$2"
             shift 2
             ;;
         -n|--count)
@@ -69,6 +84,16 @@ done
 # Validate case option
 if [[ "$CASE" != "upper" && "$CASE" != "lower" && "$CASE" != "both" ]]; then
     echo "Error: Case must be 'upper', 'lower', or 'both'"
+    exit 1
+fi
+
+# Validate delimiter option
+# - allow a single-character delimiter like ':', '-', '.', ';'
+# - allow special keyword 'none' to disable delimiters between octets
+if [[ "$DELIM" == "none" ]]; then
+    DELIM=""
+elif [[ ${#DELIM} -ne 1 ]]; then
+    echo "Error: Delimiter must be a single character or 'none'"
     exit 1
 fi
 
@@ -90,8 +115,14 @@ generate_mac() {
     local fifth=$(printf '%02X' $((RANDOM % 256)))
     local sixth=$(printf '%02X' $((RANDOM % 256)))
     
-    # Build MAC address with VMware prefix
-    local mac="00:50:56:${fourth}:${fifth}:${sixth}"
+    # Build MAC address with VMware prefix using the configured delimiter
+    # If DELIM is empty (when user passed 'none'), octets are concatenated without separators.
+    local mac
+    if [[ -z "$DELIM" ]]; then
+        mac="005056${fourth}${fifth}${sixth}"
+    else
+        mac="00${DELIM}50${DELIM}56${DELIM}${fourth}${DELIM}${fifth}${DELIM}${sixth}"
+    fi
     
     # Format output based on case type
     case "$case_type" in
