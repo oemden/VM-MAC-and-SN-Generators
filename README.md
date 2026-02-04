@@ -2,10 +2,10 @@
 
 The scripts directory contains two utility scripts to generate unique identifiers for VMware virtual machines:
 
-**version**: `0.1.0`
+**version**: `0.4.0`
 
-- `generate_mac.sh` - Generates valid VMware MAC addresses
-- `generate_sn.sh` - Generates customizable serial numbers for VM identification
+- `generate_mac.sh` `genmac` - Generates valid VMware MAC addresses
+- `generate_sn.sh` `gensn` - Generates customizable serial numbers for VM identification
 
 ---
 
@@ -18,16 +18,16 @@ Using custom Serial Numbers for the VM also Helps defining what usage or stage (
 
 You can find two utility scripts to generate unique identifiers for VMware virtual machines:
 
-- `generate_mac.sh` - Generates valid VMware MAC addresses
+- `generate_mac.sh` `genmac` - Generates valid VMware MAC addresses
 
 This allows me to define and control what IP a VM will have from start and even before setting up a fixed IP. Usefull to know in advance the IP assigned and manage DNS upward too.
 This script has some options to output MAC addresses in uppper or lowercase, and to set the count of MAC addresses to generate.
 Defaults to VMWare compatible MACs for now, but I plan to add custom/random generation in the future.
 
-- `generate_sn.sh` - Generates customizable serial numbers for VM identification
+- `generate_sn.sh` `gensn` - Generates customizable serial numbers for VM identification
 
 This script has some options to generate different nomenclatures of SNs.
-You can Set Prefixes or Suffixes like `DEV` or `PROD` in the *Serial Number*, which happens to be most usefull for VM inventory
+You can Set Prefixes or Suffixes like `DEV` or `PROD` in the *Serial Number*, which happens to be most usefull for VM Inventory or Monitoring
 
 Refer below to basic usage and Options of both scripts.
 
@@ -51,6 +51,9 @@ Generates valid VMware static MAC addresses within the allowed range for manual 
                       - lower: Lowercase format (00:50:56:xx:xx:xx) [cloudinit compatible]
                       - both: Output MAC in both lowercase and uppercase
 -n, --count NUM       Number of MAC addresses to generate (default: 1)
+-d, --delimiter DELIM Delimiter between MAC octets (single character or 'none', default: ':')
+-T, --target TYPE     Vendor/target type (currently: vmware; default: vmware)
+-R, --random          Random unicast, locally-administered MACs (lab-safe, non-vendor)
 ```
 
 ### Usage
@@ -67,6 +70,18 @@ Generates valid VMware static MAC addresses within the allowed range for manual 
 
 # Generate MAC address in both lowercase and uppercase
 ./generate_mac.sh -c both
+
+# Generate MAC addresses with a custom delimiter between octets
+./generate_mac.sh -d '-'
+
+# Generate MAC addresses without delimiters between octets
+./generate_mac.sh -d none
+
+# Generate explicit VMware-targeted MAC address (same as default behavior)
+./generate_mac.sh -T vmware
+
+# Generate random unicast, locally-administered MAC address for lab use
+./generate_mac.sh -R
 
 # Show help
 ./generate_mac.sh -h
@@ -116,6 +131,30 @@ $ ./generate_mac.sh -c lower --count 5
 00:50:56:1a:2b:3c
 00:50:56:4d:5e:6f
 ```
+
+#### Custom Delimiter Between MAC Octets
+
+```bash
+# Use dash '-' as delimiter between MAC octets
+$ ./generate_mac.sh -d '-'
+00-50-56-28-6e-35
+
+# Use dot '.' as delimiter between MAC octets
+$ ./generate_mac.sh -d '.' -n 2
+00.50.56.28.6E.35
+00.50.56.3B.C1.87
+
+# No delimiters between MAC octets (compact format)
+$ ./generate_mac.sh -d none
+005056286e35
+```
+
+### Unicast vs Random Lab MACs
+
+- `generate_mac.sh` always generates **unicast** MAC addresses and never produces multicast addresses, because multicast-style MACs are not suitable as normal VM NIC identifiers.
+- When you use `-T vmware` (or omit `-T`), MACs follow VMware’s vendor-style prefix. When you use `-R`, MACs are **random, unicast, locally-administered** and intended for lab/test environments without mimicking any real hardware vendor.
+
+For a short overview of these concepts, see [docs/mac-unicast.md](docs/mac-unicast.md).
 
 ### Use Cases
 
@@ -224,6 +263,36 @@ HQ-Q7R8S9T0-LAB
 $ ./generate_sn.sh -p "VM" -l 6 -d "_" -s "TEST"
 VM_A1B2C3_TEST
 ```
+
+---
+
+## Installation
+
+To install the scripts as convenient commands (`genmac` and `gensn`) available system-wide:
+
+```bash
+cd /path/to/VM-MAC-and-SN-Generators
+chmod +x install.sh   # if not already executable
+./install.sh
+```
+
+This will:
+
+- Copy `generate_mac.sh` to `/usr/local/bin/genmac`
+- Copy `generate_sn.sh` to `/usr/local/bin/gensn`
+- Overwrite existing `/usr/local/bin/genmac` or `/usr/local/bin/gensn` if they are already present
+
+After installation you can run:
+
+```bash
+genmac --help
+gensn --help
+```
+
+If the commands are not immediately available in your current shell, either:
+
+- Run `rehash` (zsh) or `hash -r` (bash), or
+- Open a new terminal session
 
 ---
 
