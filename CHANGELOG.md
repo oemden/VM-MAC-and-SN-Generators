@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2026-02-04
+
+### Added - install.sh
+
+- Added `install.sh` script to install project utilities into `/usr/local/bin`
+- `generate_mac.sh` is installed as `/usr/local/bin/genmac`
+- `generate_sn.sh` is installed as `/usr/local/bin/gensn`
+- Existing `genmac` and `gensn` binaries are overwritten with a clear notice
+
+### Changed
+
+- Bumped `generate_mac.sh` and `generate_sn.sh` script versions to `0.3.0`
+
+### Documentation
+
+- Updated `README.md` with installation instructions and usage of `genmac` and `gensn`
+- Updated `TODOs.md` to mark the install script task as completed
+
 ## [0.2.0] - 2026-02-04
 
 ### Added - generate_mac.sh

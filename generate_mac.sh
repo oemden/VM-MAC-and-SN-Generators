@@ -1,9 +1,9 @@
 #!/bin/bash
 # Generate valid VMware static MAC addresses
 # Valid range: 00:50:56:00:00:00 to 00:50:56:3F:FF:FF
-# v0.2.0: Added CLI options (-d, --delimiter) to generate_mac.sh
+# v0.3.0: See CHANGELOG.md for details
 
-version="0.2.0"
+version="0.3.0"
 
 # Display help and usage information
 show_help() {

@@ -1,5 +1,11 @@
 # TODO
 
+## Project Global
+
+- [x] Create an install script to install scripts in `/usr/local/bin/`
+  - `generate_mac.sh` target alias `/usr/local/bin/genmac`
+  - `generate_sn.sh` target alias  `/usr/local/bin/gensn`
+
 ## Generate MAC addresses script
 
 ### Next steps
@@ -13,9 +19,11 @@
 ### For later
 
 - [x] Add: `-d` MAC Addressess delimiter ( separator `;`,`:`,`.`,`-`,`<none>` )
-- [ ] Add: .env / $ENV / config file `~/.genvmmacsn/{genmac.cfg,gensn.cfg}` options
 - [ ] Add: `-R` Random "Non-VMware" MAC Addresses option
 - [ ] Add: `-C` "Custom 3 first bits" MAC Addresses option
+- [ ] Add: .env / $ENV / config file `~/.genvmmacsn/{genmac.cfg,gensn.cfg}` options to set custom user defaults
+  - [ ] User `$ENV` ( used when calling script from /usr/local/bin/*.sh )
+  - [ ] `.env` for App project ( to come )
 - [ ] Add: `-V` "Specific vendor 3 first bits" MAC Addresses option
 
 ## Generate IP addresses script

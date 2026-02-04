@@ -2,10 +2,10 @@
 
 The scripts directory contains two utility scripts to generate unique identifiers for VMware virtual machines:
 
-**version**: `0.2.0`
+**version**: `0.3.0`
 
-- `generate_mac.sh` - Generates valid VMware MAC addresses
-- `generate_sn.sh` - Generates customizable serial numbers for VM identification
+- `generate_mac.sh` `genmac` - Generates valid VMware MAC addresses
+- `generate_sn.sh` `gensn` - Generates customizable serial numbers for VM identification
 
 ---
 
@@ -18,16 +18,16 @@ Using custom Serial Numbers for the VM also Helps defining what usage or stage (
 
 You can find two utility scripts to generate unique identifiers for VMware virtual machines:
 
-- `generate_mac.sh` - Generates valid VMware MAC addresses
+- `generate_mac.sh` `genmac` - Generates valid VMware MAC addresses
 
 This allows me to define and control what IP a VM will have from start and even before setting up a fixed IP. Usefull to know in advance the IP assigned and manage DNS upward too.
 This script has some options to output MAC addresses in uppper or lowercase, and to set the count of MAC addresses to generate.
 Defaults to VMWare compatible MACs for now, but I plan to add custom/random generation in the future.
 
-- `generate_sn.sh` - Generates customizable serial numbers for VM identification
+- `generate_sn.sh` `gensn` - Generates customizable serial numbers for VM identification
 
 This script has some options to generate different nomenclatures of SNs.
-You can Set Prefixes or Suffixes like `DEV` or `PROD` in the *Serial Number*, which happens to be most usefull for VM inventory
+You can Set Prefixes or Suffixes like `DEV` or `PROD` in the *Serial Number*, which happens to be most usefull for VM Inventory or Monitoring
 
 Refer below to basic usage and Options of both scripts.
 
@@ -248,6 +248,36 @@ HQ-Q7R8S9T0-LAB
 $ ./generate_sn.sh -p "VM" -l 6 -d "_" -s "TEST"
 VM_A1B2C3_TEST
 ```
+
+---
+
+## Installation
+
+To install the scripts as convenient commands (`genmac` and `gensn`) available system-wide:
+
+```bash
+cd /path/to/VM-MAC-and-SN-Generators
+chmod +x install.sh   # if not already executable
+./install.sh
+```
+
+This will:
+
+- Copy `generate_mac.sh` to `/usr/local/bin/genmac`
+- Copy `generate_sn.sh` to `/usr/local/bin/gensn`
+- Overwrite existing `/usr/local/bin/genmac` or `/usr/local/bin/gensn` if they are already present
+
+After installation you can run:
+
+```bash
+genmac --help
+gensn --help
+```
+
+If the commands are not immediately available in your current shell, either:
+
+- Run `rehash` (zsh) or `hash -r` (bash), or
+- Open a new terminal session
 
 ---
 
