@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2026-02-04
+
+### Added - generate_mac.sh
+
+- Added `-T, --target TYPE` option to specify vendor/target type (currently supports `vmware`, default behavior)
+- Added `-R, --random` option to generate random unicast, locally-administered MAC addresses for lab use
+- Added validation to ensure all generated MACs are unicast (never multicast)
+- Added validation to prevent combining incompatible `-T` and `-R` options
+
+### Documentation
+
+- Created `mac-unicast.md` explaining unicast vs multicast MAC addresses and why scripts only generate unicast MACs
+- Updated `generate_mac.sh` help text with `-T` and `-R` option descriptions and examples
+- Updated `README.md` to document `-T` and `-R` options with usage examples
+- Added "Unicast vs Random Lab MACs" section in README with link to `mac-unicast.md`
+- Updated `TODOs.md` to mark `-T` and `-R` features as completed and added vendor data/app planning section
+
 ## [0.3.0] - 2026-02-04
 
 ### Added - install.sh

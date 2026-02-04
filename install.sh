@@ -3,7 +3,9 @@
 # Install script for generate_mac.sh and generate_sn.sh
 # This script copies the project scripts into /usr/local/bin
 # so they can be used as simple commands: genmac and gensn.
-# v0.3.0: See CHANGELOG.md for details
+# v0.4.0: See CHANGELOG.md for details
+
+version="0.4.0"
 
 set -euo pipefail
 
@@ -16,7 +18,7 @@ SRC_GENSN="${PROJECT_DIR}/generate_sn.sh"
 TARGET_GENMAC="${INSTALL_DIR}/genmac"
 TARGET_GENSN="${INSTALL_DIR}/gensn"
 
-echo "=== VM MAC and SN Generators installer ==="
+echo "=== VM MAC and SN Generators installer v${version} ==="
 echo ""
 
 # Check that source scripts exist in the current project directory

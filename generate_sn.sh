@@ -1,14 +1,14 @@
 #!/bin/bash
 # Generate custom serial numbers for VMware VMs
-# v0.3.0: See CHANGELOG.md for details
+# v0.4.0: See CHANGELOG.md for details
 
-version="0.3.0"
+version="0.4.0"
 
 show_help() {
     cat << EOF
 Usage: $0 [OPTIONS]
 
-Generate custom serial numbers with configurable format.
+Generate custom serial numbers with configurable format version ${version}.
 
 OPTIONS:
     -l, --length NUM      Length of random part (default: 6)

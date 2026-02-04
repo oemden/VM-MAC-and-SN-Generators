@@ -2,7 +2,7 @@
 
 The scripts directory contains two utility scripts to generate unique identifiers for VMware virtual machines:
 
-**version**: `0.3.0`
+**version**: `0.4.0`
 
 - `generate_mac.sh` `genmac` - Generates valid VMware MAC addresses
 - `generate_sn.sh` `gensn` - Generates customizable serial numbers for VM identification
@@ -52,6 +52,8 @@ Generates valid VMware static MAC addresses within the allowed range for manual 
                       - both: Output MAC in both lowercase and uppercase
 -n, --count NUM       Number of MAC addresses to generate (default: 1)
 -d, --delimiter DELIM Delimiter between MAC octets (single character or 'none', default: ':')
+-T, --target TYPE     Vendor/target type (currently: vmware; default: vmware)
+-R, --random          Random unicast, locally-administered MACs (lab-safe, non-vendor)
 ```
 
 ### Usage
@@ -74,6 +76,12 @@ Generates valid VMware static MAC addresses within the allowed range for manual 
 
 # Generate MAC addresses without delimiters between octets
 ./generate_mac.sh -d none
+
+# Generate explicit VMware-targeted MAC address (same as default behavior)
+./generate_mac.sh -T vmware
+
+# Generate random unicast, locally-administered MAC address for lab use
+./generate_mac.sh -R
 
 # Show help
 ./generate_mac.sh -h
@@ -140,6 +148,13 @@ $ ./generate_mac.sh -d '.' -n 2
 $ ./generate_mac.sh -d none
 005056286e35
 ```
+
+### Unicast vs Random Lab MACs
+
+- `generate_mac.sh` always generates **unicast** MAC addresses and never produces multicast addresses, because multicast-style MACs are not suitable as normal VM NIC identifiers.
+- When you use `-T vmware` (or omit `-T`), MACs follow VMware’s vendor-style prefix. When you use `-R`, MACs are **random, unicast, locally-administered** and intended for lab/test environments without mimicking any real hardware vendor.
+
+For a short overview of these concepts, see [docs/mac-unicast.md](docs/mac-unicast.md).
 
 ### Use Cases
 
