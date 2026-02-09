@@ -1,0 +1,21 @@
+# user Stories
+
+- As a user I want [] to [] so that []
+- As A User I want a simple landing page to clearly identify Options ( VM vs SN generator ) with Features blocks on top of the page.
+- As a user I want a centered block (of the feature) to click Generate so that I can generate the expected output SN or MAC.
+- As a user I want a button to switch between light, dark or system mode so that I can applky my theme preference.
+- As a User I want a Settings button to set defaults Features Preferences for SN and MAC generation and be able to just Click Generate SN or Mac.
+- As a user I want Settings page to have a left bar with Features listed (SN & MAC ) and display All scripts Options, to be able to set defaults Options.
+- As a user a want a dropdown to display Feature options ( SN or MAC ) to override Defaults Settings before clicking Generate.
+- As a User I want a button to be able to copy Result to clipboard
+- As a User I want a button to be able to download the result in a file
+- As a user I want an option per feature ( SN or MAC ) to set defaults formating of the result when downloading files
+  - JSON, YAML, RAW, CSV...
+- As a User I want a Help Section / Menu displaying Usage ( eg: a recap of the READ ME with example )
+- As a User I want to be able to Save generated Results and provide Comments / Usecase:
+  - example: When generating MAC Address provide a comment field to describe usage - eg: MAC for VM ABC in Project XYZ
+  - example: When generating SN provide a comment field to describe usage - eg: SN for VM ABC in Project XYZ
+- As a user I want to be able to run the App in a container so that I can use it with UI.
+- As a user I want to be able to keep/use the bash scripts ( as CLI ).
+- As a user I want .env settings to be able to set domain and url of the webpage.
+- As a user I want API feature to be able to call tools from script ( like CI/CDs with Terraform or Ansible for example )

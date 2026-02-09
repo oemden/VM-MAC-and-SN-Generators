@@ -1,6 +1,26 @@
+# Environment
 .*env*
 !.env.example
+
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+*.tsbuildinfo
+
+# OS
 .DS_Store
+
+# IDE
 .claude
 .cursor
 .vscode
+.idea
+
+# Logs
+*.log
+npm-debug.log*
+
+# Bun
+bun.lockb
