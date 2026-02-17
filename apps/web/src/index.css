@@ -84,9 +84,46 @@ body {
 /* Cards */
 .generators {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(560px, 1fr));
   gap: 2rem;
   margin-top: 2rem;
+}
+
+.generator-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.generator-options {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.generator-results {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.save-results-section {
+  margin-top: 1rem;
+}
+
+.results-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 120px;
+  background: var(--bg-secondary);
+  border: 1px dashed var(--border-color);
+  border-radius: 0.5rem;
+}
+
+.results-placeholder-text {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
 }
 
 .card {
@@ -401,6 +438,11 @@ body {
   }
 
   .generators {
+    grid-template-columns: 1fr;
+    min-width: 0;
+  }
+
+  .generator-layout {
     grid-template-columns: 1fr;
   }
 
