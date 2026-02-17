@@ -9,12 +9,16 @@ import {
   type MacOptions,
   type SnOptions
 } from '@vmgen/core'
+import resultsRoutes from './results/routes'
 
 const app = new Hono()
 
 // Middleware
 app.use('*', logger())
 app.use('*', cors())
+
+// Mount results API
+app.route('/api/results', resultsRoutes)
 
 // Health check
 app.get('/', (c) => {
@@ -23,7 +27,8 @@ app.get('/', (c) => {
     version: '0.1.0',
     endpoints: {
       mac: '/api/mac/generate',
-      sn: '/api/sn/generate'
+      sn: '/api/sn/generate',
+      results: '/api/results'
     }
   })
 })
