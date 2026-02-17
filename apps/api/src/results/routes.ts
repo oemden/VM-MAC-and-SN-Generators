@@ -1,5 +1,5 @@
 import { Hono } from 'hono'
-import { desc, eq } from 'drizzle-orm'
+import { and, desc, eq } from 'drizzle-orm'
 import { db, schema } from '../db'
 import {
   validateSaveResultsBody,
@@ -8,6 +8,22 @@ import {
 } from './validation'
 
 const results = new Hono()
+
+/** Get VM id by name, or create VM if not exists (create-on-fly) */
+async function getOrCreateVmId(vmName: string): Promise<number> {
+  const existing = await db
+    .select()
+    .from(schema.vms)
+    .where(eq(schema.vms.name, vmName))
+    .limit(1)
+  if (existing[0]) return existing[0].id
+  const [row] = await db
+    .insert(schema.vms)
+    .values({ name: vmName, createdAt: new Date() })
+    .returning({ id: schema.vms.id })
+  if (!row) throw new Error('Failed to create VM')
+  return row.id
+}
 
 /** POST /api/results — Save one or more SN/MAC results */
 results.post('/', async (c) => {
@@ -28,8 +44,31 @@ results.post('/', async (c) => {
       )
     }
 
-    const { type, values, comment, vm_name } = validation.data
+    const { type, values, comment, vm_id: vmIdParam, vm_name } = validation.data
     const now = new Date()
+
+    let vmId: number | null = null
+    if (vmIdParam) {
+      vmId = vmIdParam
+    } else if (vm_name) {
+      vmId = await getOrCreateVmId(vm_name)
+    }
+
+    if (type === 'sn' && vmId) {
+      const existing = await db
+        .select({ id: schema.savedResults.id })
+        .from(schema.savedResults)
+        .where(
+          and(
+            eq(schema.savedResults.vmId, vmId),
+            eq(schema.savedResults.type, 'sn')
+          )
+        )
+        .limit(1)
+      if (existing.length > 0) {
+        return c.json({ error: 'VM already has a Serial Number' }, 409)
+      }
+    }
 
     const rows = await db
       .insert(schema.savedResults)
@@ -39,6 +78,7 @@ results.post('/', async (c) => {
           value,
           comment: comment ?? null,
           vmName: vm_name ?? null,
+          vmId,
           createdAt: now,
           userId: null,
           projectId: null
@@ -75,9 +115,12 @@ results.get('/', async (c) => {
         value: schema.savedResults.value,
         comment: schema.savedResults.comment,
         vmName: schema.savedResults.vmName,
+        vmId: schema.savedResults.vmId,
+        vmNameFromJoin: schema.vms.name,
         createdAt: schema.savedResults.createdAt
       })
       .from(schema.savedResults)
+      .leftJoin(schema.vms, eq(schema.savedResults.vmId, schema.vms.id))
       .where(type ? eq(schema.savedResults.type, type) : undefined)
       .orderBy(desc(schema.savedResults.createdAt))
       .limit(limit)
@@ -90,7 +133,7 @@ results.get('/', async (c) => {
         type: r.type,
         value: r.value,
         comment: r.comment,
-        vm_name: r.vmName,
+        vm_name: r.vmNameFromJoin ?? r.vmName ?? null,
         created_at: r.createdAt
       }))
     })

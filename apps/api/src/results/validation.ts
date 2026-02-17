@@ -21,6 +21,7 @@ export const saveResultsBodySchema = z.object({
     .max(COMMENT_MAX_LENGTH, `comment must be at most ${COMMENT_MAX_LENGTH} characters`)
     .optional()
     .or(z.literal('')),
+  vm_id: z.number().int().positive().optional(),
   vm_name: z
     .string()
     .max(VM_NAME_MAX_LENGTH, `vm_name must be at most ${VM_NAME_MAX_LENGTH} characters`)
