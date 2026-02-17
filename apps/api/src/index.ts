@@ -10,6 +10,7 @@ import {
   type SnOptions
 } from '@vmgen/core'
 import resultsRoutes from './results/routes'
+import vmsRoutes from './vms/routes'
 
 const app = new Hono()
 
@@ -19,6 +20,7 @@ app.use('*', cors())
 
 // Mount results API
 app.route('/api/results', resultsRoutes)
+app.route('/api/vms', vmsRoutes)
 
 // Health check
 app.get('/', (c) => {
@@ -28,7 +30,8 @@ app.get('/', (c) => {
     endpoints: {
       mac: '/api/mac/generate',
       sn: '/api/sn/generate',
-      results: '/api/results'
+      results: '/api/results',
+      vms: '/api/vms'
     }
   })
 })
@@ -86,6 +89,7 @@ const port = parseInt(process.env.API_PORT ?? '3000', 10)
 
 console.log(`API server starting on port ${port}`)
 
+export { app }
 export default {
   port,
   fetch: app.fetch
