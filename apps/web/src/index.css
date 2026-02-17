@@ -309,6 +309,48 @@ body {
   margin-bottom: 1rem;
 }
 
+/* VM Combobox */
+.vm-combobox {
+  position: relative;
+}
+
+.vm-combobox-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin: 0.25rem 0 0;
+  padding: 0.5rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  box-shadow: var(--shadow-md);
+  list-style: none;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 10;
+}
+
+.vm-combobox-item {
+  padding: 0.5rem 0.875rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+.vm-combobox-item:hover {
+  background: var(--bg-secondary);
+}
+
+.vm-combobox-item--muted {
+  color: var(--text-secondary);
+  cursor: default;
+}
+
+.vm-combobox-item--create {
+  color: var(--accent);
+  font-weight: 500;
+}
+
 /* Error message */
 .error-message {
   background: #fef2f2;
