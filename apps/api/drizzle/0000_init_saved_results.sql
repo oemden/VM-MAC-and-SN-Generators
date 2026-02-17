@@ -1,4 +1,4 @@
--- Save results table (design: docs/plans/2026-02-16-save-results-backend-design.md)
+-- Save results table (design: 2026-02-16-save-results-backend-design)
 CREATE TABLE IF NOT EXISTS `saved_results` (
   `id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
   `type` text NOT NULL,

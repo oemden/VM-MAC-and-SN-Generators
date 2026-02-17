@@ -33,6 +33,9 @@ apps/api/data/
 # Git worktrees
 .worktrees/
 
+# Personal / working docs (not for public repo)
+.local/
+
 # Images
 *.png
 *.jpg

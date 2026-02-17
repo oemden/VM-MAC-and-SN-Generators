@@ -1,4 +1,4 @@
--- VMs table (design: docs/plans/2026-02-17-VM-SN-MAC-business-rules-assessment.md)
+-- VMs table (design: 2026-02-17-VM-SN-MAC-business-rules-assessment)
 CREATE TABLE IF NOT EXISTS `vms` (
   `id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
   `name` text NOT NULL,
