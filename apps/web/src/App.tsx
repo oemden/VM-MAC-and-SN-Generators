@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
+import { Link, Routes, Route } from 'react-router-dom'
 import { MacGenerator } from './components/MacGenerator'
 import { SnGenerator } from './components/SnGenerator'
+import { SavedResults } from './pages/SavedResults'
 
 type Theme = 'light' | 'dark' | 'system'
 
@@ -41,16 +43,28 @@ function App() {
     <>
       <header className="header">
         <h1>VM Generator</h1>
-        <button className="theme-toggle" onClick={cycleTheme}>
+        <nav style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <Link to="/">Generate</Link>
+          <Link to="/saved">Saved</Link>
+          <button className="theme-toggle" onClick={cycleTheme}>
           {getThemeIcon()}
         </button>
+        </nav>
       </header>
 
       <main className="container">
-        <div className="generators">
-          <MacGenerator />
-          <SnGenerator />
-        </div>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <div className="generators">
+                <MacGenerator />
+                <SnGenerator />
+              </div>
+            }
+          />
+          <Route path="/saved" element={<SavedResults />} />
+        </Routes>
       </main>
 
       <footer className="footer">
