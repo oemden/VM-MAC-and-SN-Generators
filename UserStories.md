@@ -30,6 +30,8 @@
 - As a user I want to be able to save my results to consult them afterward
 - As a user I want to be able to manage a List of VM to be able to associate result to a VM and track afterward
 - As a user I want to generate SN,MAC without the requirement to associate them to a VM
+- **Business rule (mandatory):** Each VM has at most one Serial Number. The system must enforce this constraint.
+- **Business rule (mandatory):** A VM can have multiple MAC addresses (e.g. multiple NICs). No uniqueness limit for MACs per VM.
 - As a user I want the generation date to be saved for each result if I save them in my list
 - As a user I want to be able to generate both SN and MAC for one or multiple VM. eg: avoid to go to SN page then MAC page.
   - Dedicated VM page with both SN and MAC options combined.
