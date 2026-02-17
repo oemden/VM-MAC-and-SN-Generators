@@ -15,7 +15,7 @@
     "build:core": "bun run --cwd packages/core build",
     "build:api": "bun run --cwd apps/api build",
     "build:web": "bun run --cwd apps/web build",
-    "test": "bun run --cwd packages/core test && bun run --cwd apps/api test",
+    "test": "bun run --cwd packages/core test && bun run --cwd apps/api test && bun run --cwd apps/web test",
     "lint": "eslint ."
   }
 }
