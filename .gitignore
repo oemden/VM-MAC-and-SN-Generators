@@ -17,6 +17,8 @@ dist/
 .cursor
 .vscode
 .idea
+.vibe
+.agents
 
 # Logs
 *.log
@@ -24,6 +26,12 @@ npm-debug.log*
 
 # Bun
 bun.lockb
+
+# API SQLite DB (default path)
+apps/api/data/
+
+# Git worktrees
+.worktrees/
 
 # Images
 *.png
