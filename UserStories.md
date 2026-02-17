@@ -16,6 +16,12 @@
 - As a User I want to be able to Save generated Results and provide Comments / Usecase:
   - example: When generating MAC Address provide a comment field to describe usage - eg: MAC for VM ABC in Project XYZ
   - example: When generating SN provide a comment field to describe usage - eg: SN for VM ABC in Project XYZ
+- AS a user I want a toggle (ON/OFF) in SN generator to assign a VM [ON] or simply generate n SN
+  - As a user I want to be able to choose A vm from dropdown and Be able to Create a New VM ( in same dropdown ) when generating a SN
+  - As a user I want a 'Select' type dropdwon when chossing VM in SN
+- AS a user I want a toggle (ON/OFF) in MAC generator to assign a VM [ON] or simply generate n MAC
+  - As a user I want to be able to choose A vm from dropdown and Be able to Create a New VM ( in same dropdown )when generating a MAC
+  - As a user I want a 'Select' type dorpdown when chossing VM in MAC
 - As a user I want to be able to run the App in a container so that I can use it with UI.
 - As a user I want to be able to keep/use the bash scripts ( as CLI ).
 - As a user I want .env settings to be able to set domain and url of the webpage.
@@ -45,6 +51,13 @@
 - As a User I want a landing Dashboard, with Greeting and summary of Projects, VM, SN, MACs, hypervisor, etc. (text)
 - As a User I want a landing Dashboard, with Greeting and summary of Projects, VM, SN, MACs, hypervisor, etc. (charts)
 - As a user I want to be able to filter and/or search VM, Projects, Sites on the Dashboard and that chart reflect the filtering.
+- As a user I want to be able to sort results in the Saved results page ( table view )
+- As a user I want to be able to delete records in table view of SN saved results
+- As a user I want to be able to delete records in table view of MAC saved results
+- As I user I want to be able to delete VMs
+  - With a Warning if the VM has associated Results ( SN and/or MAC )
+  - With an Option to keep exsiting SN or MAc and assigned the1./ Yesm to NO VM
+- As I user I want to be able to delete Records in general, per record
 
 ## Pro features ONLY
 
