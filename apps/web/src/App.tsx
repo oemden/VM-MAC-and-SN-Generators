@@ -68,7 +68,7 @@ function App() {
       </main>
 
       <footer className="footer">
-        VM MAC & SN Generator v0.1.0
+        VM MAC & SN Generator v0.6.0
       </footer>
     </>
   )

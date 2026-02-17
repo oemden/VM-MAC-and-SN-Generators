@@ -2,10 +2,42 @@
 
 The scripts directory contains two utility scripts to generate unique identifiers for VMware virtual machines:
 
-**version**: `0.4.0`
+**version**: `0.6.0`
 
 - `generate_mac.sh` `genmac` - Generates valid VMware MAC addresses
 - `generate_sn.sh` `gensn` - Generates customizable serial numbers for VM identification
+- **Web App** - React + API: generate MAC/SN, save to VMs, view saved results
+
+---
+
+## Web App (Save UI and Saved Results)
+
+The web app provides a UI to generate MAC addresses and Serial Numbers, save them to VMs, and view saved results.
+
+### Run the app
+
+```bash
+bun install
+bun run db:migrate   # First run: create SQLite DB and tables
+bun run dev          # Starts API (port 3000) and web (port 5173)
+```
+
+### Save to Virtual Machine
+
+- Generate MAC or SN, then use the **Save to Virtual Machine** form
+- Select or type a VM name (create-on-fly supported)
+- Add an optional comment
+- One SN per VM; multiple MACs per VM allowed
+
+### Saved Results page
+
+- Navigate to **Saved** in the header
+- Filter by type (All / SN / MAC)
+- Table shows id, type, value, vm_name, comment, created_at
+
+### API base URL
+
+Set `VITE_API_URL` in `.env` if the API runs on a different host (default: `http://localhost:3000`).
 
 ---
 

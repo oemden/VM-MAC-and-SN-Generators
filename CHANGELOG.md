@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] - 2026-02-17
+
+### Added - Web App
+
+- Save UI: VM combobox (select or create-on-fly), comment field, Save to Virtual Machine button
+- Saved Results page: table view with type filter (All / SN / MAC)
+- Two-column layout: Options left, Generated results right (per mockups)
+- react-router-dom: routes `/` (Generate) and `/saved` (Saved Results)
+- Vitest + React Testing Library for web app tests
+
+### Added - API
+
+- SQLite: create data directory automatically if missing (fixes CANTOPEN in worktrees/fresh clones)
+
+### Changed
+
+- MacGenerator and SnGenerator: two-column layout with SaveResultsForm in results panel
+
 ## [0.4.0] - 2026-02-04
 
 ### Added - generate_mac.sh
