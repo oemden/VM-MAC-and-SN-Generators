@@ -1,5 +1,5 @@
 import { Hono } from 'hono'
-import { asc } from 'drizzle-orm'
+import { asc, eq } from 'drizzle-orm'
 import { db, schema } from '../db'
 import { createVmBodySchema } from './validation'
 
@@ -31,6 +31,14 @@ vms.post('/', async (c) => {
     if (!result.success) {
       const msg = result.error.issues[0]?.message ?? 'Validation failed'
       return c.json({ error: msg }, 400)
+    }
+    const existing = await db
+      .select({ id: schema.vms.id })
+      .from(schema.vms)
+      .where(eq(schema.vms.name, result.data.name))
+      .limit(1)
+    if (existing.length > 0) {
+      return c.json({ error: 'VM with this name already exists' }, 409)
     }
     const [row] = await db
       .insert(schema.vms)
