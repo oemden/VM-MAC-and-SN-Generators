@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { API_URL } from '../lib/api'
+import { SaveResultsForm } from './SaveResultsForm'
 
 interface SnResult {
   sn: string
@@ -14,8 +16,6 @@ interface SnOptions {
   noPrefix: boolean
   noDelimiter: boolean
 }
-
-const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000'
 
 export function SnGenerator() {
   const [options, setOptions] = useState<SnOptions>({
@@ -99,15 +99,17 @@ export function SnGenerator() {
         </div>
       </div>
 
-      <div
-        className="options-toggle"
-        onClick={() => setShowOptions(!showOptions)}
-      >
-        {showOptions ? '▼' : '▶'} Options
-      </div>
+      <div className="generator-layout">
+        <div className="generator-options">
+          <div
+            className="options-toggle"
+            onClick={() => setShowOptions(!showOptions)}
+          >
+            {showOptions ? '▼' : '▶'} Options
+          </div>
 
-      {showOptions && (
-        <div className="options-panel">
+          {showOptions && (
+            <div className="options-panel">
           <div className="form-row">
             <div className="form-group">
               <label className="form-label">Count</label>
@@ -227,47 +229,63 @@ export function SnGenerator() {
               />
             </div>
           </div>
+            </div>
+          )}
+
+          <button
+            className="btn btn-primary btn-full"
+            onClick={generate}
+            disabled={loading}
+          >
+            {loading ? 'Generating...' : 'Generate SN'}
+          </button>
+
+          {error && <div className="error-message">{error}</div>}
         </div>
-      )}
 
-      <button
-        className="btn btn-primary btn-full"
-        onClick={generate}
-        disabled={loading}
-      >
-        {loading ? 'Generating...' : 'Generate SN'}
-      </button>
-
-      {error && <div className="error-message">{error}</div>}
-
-      {results.length > 0 && (
-        <div className="results">
-          <div className="results-header">
-            <span className="results-title">
-              Generated ({results.length})
-            </span>
-            <button
-              className={`copy-btn ${copiedIndex === -1 ? 'copied' : ''}`}
-              onClick={copyAll}
-            >
-              {copiedIndex === -1 ? 'Copied!' : 'Copy All'}
-            </button>
-          </div>
-          <div className="results-list">
-            {results.map((result, index) => (
-              <div key={index} className="result-item">
-                <span className="result-value">{result.sn}</span>
-                <button
-                  className={`copy-btn ${copiedIndex === index ? 'copied' : ''}`}
-                  onClick={() => copyToClipboard(result.sn, index)}
-                >
-                  {copiedIndex === index ? 'Copied!' : 'Copy'}
-                </button>
+        <div className="generator-results">
+          {results.length === 0 ? (
+            <div className="results-placeholder">
+              <span className="results-placeholder-text">Generated results will appear here</span>
+            </div>
+          ) : (
+            <>
+              <div className="results">
+                <div className="results-header">
+                  <span className="results-title">
+                    Generated ({results.length})
+                  </span>
+                  <button
+                    className={`copy-btn ${copiedIndex === -1 ? 'copied' : ''}`}
+                    onClick={copyAll}
+                  >
+                    {copiedIndex === -1 ? 'Copied!' : 'Copy All'}
+                  </button>
+                </div>
+                <div className="results-list">
+                  {results.map((result, index) => (
+                    <div key={index} className="result-item">
+                      <span className="result-value">{result.sn}</span>
+                      <button
+                        className={`copy-btn ${copiedIndex === index ? 'copied' : ''}`}
+                        onClick={() => copyToClipboard(result.sn, index)}
+                      >
+                        {copiedIndex === index ? 'Copied!' : 'Copy'}
+                      </button>
+                    </div>
+                  ))}
+                </div>
               </div>
-            ))}
-          </div>
+              <div className="save-results-section">
+                <SaveResultsForm
+                  type="sn"
+                  values={results.map((r) => r.sn)}
+                />
+              </div>
+            </>
+          )}
         </div>
-      )}
+      </div>
     </div>
   )
 }
