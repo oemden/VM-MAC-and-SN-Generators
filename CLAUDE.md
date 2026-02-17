@@ -1,13 +1,18 @@
 # Project Description
 
-This project is a full-stack Serial Number and MAC address Generator for Virtual machines with a React frontend and Node.js/Express backend:
+This project is a Serial Number and MAC address Generator for Virtual machines. It has both:
+
+- CLI tool ( bash scripts )
+- full-stack app with a React frontend and Node.js/Express backend:
 
 - Read the README.md to understand the project purpose
 
 ## GOAL
 
-- Provide a web page to call the scripts and generate SN or MAC addresses.
-- Self-host the Project  in a Docker compose file.
+- Generate Custom Serials Numbers and compliant MAC addresses for Virtual Machines with usefull options for DevOps and Sys Admins.
+- Provide CLI tool ( 2 separate scripts as of now)
+- Provide a web App to call the scripts and generate SN or MAC addresses.
+- POssibility to Self-host the Project in a Docker container.
 
 ## Core Architecture
 

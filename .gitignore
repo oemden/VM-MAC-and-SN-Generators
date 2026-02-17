@@ -24,3 +24,16 @@ npm-debug.log*
 
 # Bun
 bun.lockb
+
+# Images
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+*.ico
+*.webp
+*.avif
+*.heic
+*.heif
+*.heif-s

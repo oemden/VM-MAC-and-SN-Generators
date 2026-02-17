@@ -1,16 +1,17 @@
 # user Stories
 
-- As a user I want [] to [] so that []
+## Standard Features
+
 - As A User I want a simple landing page to clearly identify Options ( VM vs SN generator ) with Features blocks on top of the page.
 - As a user I want a centered block (of the feature) to click Generate so that I can generate the expected output SN or MAC.
 - As a user I want a button to switch between light, dark or system mode so that I can applky my theme preference.
-- As a User I want a Settings button to set defaults Features Preferences for SN and MAC generation and be able to just Click Generate SN or Mac.
-- As a user I want Settings page to have a left bar with Features listed (SN & MAC ) and display All scripts Options, to be able to set defaults Options.
+- As a User I want a Settings button to set defaults Features Preferences for SN and MAC generation and be able to just Click Generate SN or Mac based on the defaults values set
+- As a user I want Settings page to have a left bar with Features listed (SN, MAC, ... ) and display All scripts Options, to be able to set defaults Options.
 - As a user a want a dropdown to display Feature options ( SN or MAC ) to override Defaults Settings before clicking Generate.
 - As a User I want a button to be able to copy Result to clipboard
 - As a User I want a button to be able to download the result in a file
 - As a user I want an option per feature ( SN or MAC ) to set defaults formating of the result when downloading files
-  - JSON, YAML, RAW, CSV...
+  - JSON, YAML, RAW, PDF, CSV...
 - As a User I want a Help Section / Menu displaying Usage ( eg: a recap of the READ ME with example )
 - As a User I want to be able to Save generated Results and provide Comments / Usecase:
   - example: When generating MAC Address provide a comment field to describe usage - eg: MAC for VM ABC in Project XYZ
@@ -18,4 +19,73 @@
 - As a user I want to be able to run the App in a container so that I can use it with UI.
 - As a user I want to be able to keep/use the bash scripts ( as CLI ).
 - As a user I want .env settings to be able to set domain and url of the webpage.
-- As a user I want API feature to be able to call tools from script ( like CI/CDs with Terraform or Ansible for example )
+- As a user I want API features to be able to call tools from script ( like CI/CDs with Terraform or Ansible for example )
+- As a developer I want to enable Pro features via subscriptions.
+- As a Power-User I want shorcuts to go to settings or navigate to a tool ( SN, MAC generator )
+- As a user I want to be able to copy, dowload each result individually, or all at once
+- As a user I want a CLEAR/Reset button to clear generated results - and start fresh.
+- As a user I want a Profile page to manage my settings
+- As a user I want an icon ( gear icon ) on top right to go directly to settings
+- As a user I want an icon ( avater icon ) on top right to go directly to my profile settings
+- As a user I want to be able to save my results to consult them afterward
+- As a user I want to be able to manage a List of VM to be able to associate result to a VM and track afterward
+- As a user I want to generate SN,MAC without the requirement to associate them to a VM
+- As a user I want the generation date to be saved for each result if I save them in my list
+- As a user I want to be able to generate both SN and MAC for one or multiple VM. eg: avoid to go to SN page then MAC page.
+  - Dedicated VM page with both SN and MAC options combined.
+  - Only a single Generate button
+  - Possibility to generate more than 1 VM
+  - Possibility to Name VM(s) from this page ( eg: no having to navigate to VM list )
+  - As a user I want to be able to choose VM from a dropdown list or create a New VM record from that dropdowm ( eg: avoid going to VM management page )
+- As a User I want to be able to import existing/new VM from csv files
+- As a User I want to be able to export VM records.
+- As a user I want to be able to choose language ( EN & FR to start )
+- As a User I want a landing Dashboard, with Greeting and summary of Projects, VM, SN, MACs, hypervisor, etc. (text)
+- As a User I want a landing Dashboard, with Greeting and summary of Projects, VM, SN, MACs, hypervisor, etc. (charts)
+- As a user I want to be able to filter and/or search VM, Projects, Sites on the Dashboard and that chart reflect the filtering.
+
+## Pro features ONLY
+
+- As a user I want to manage Projects and be able to attach generated results to a project
+- As a user I want to Manage/associate VMs to a project
+- As a user I want to associate VM to generated results and be able to attach generated results to a project
+- As a user I want to associate VM to generated results and be able to detach generated results from a project ( eg: NO project )
+- As a user I want to manage Teams and be able to associate Team and Team members to a project
+- AS a User I want RABC control to manage RO RW to groups / users
+- As a Security Officer/Manager I want to be able to Authenticate via SSO / OAuth / OTP 5 do not reinvent the wheel, and rely on exisitng libraries / tools. Backlog
+- As a Manager I want to assign defaults (SN,MAC) per project
+- As a Manager I want to be able to enable/disable User registration
+- As a Manager I want to be able to enable/disable Projects management
+- As a Manager I want to be able to enable/disable Team management
+- As a Manager I want to be able to import Project from csv files
+- As a Manager I want to be able to import Sites from csv files
+- As a Manager I want to be able to import Hypervisors from csv files
+- As a Manager I want to be able to import Teams from csv files
+- As a Manager I want to be able to import Groups from csv files
+- As a Manager I want to be able to import Users from csv files
+- As a Manager I want to be able to manage/assign Virtual Machines to Sites ( On Premise, Cloud, ...)
+- As a Manager I want to be able to manage/assign Virtual Machines to Hypervisor(s) ( On Premise, Cloud, ...)
+- As a Manager I want to be able to manage/assign Hypervisor(s) to Sites ( On Premise, Cloud, ...)
+- As a Manager I want to be able to manage/assign Site(s) to Projects
+- As a Manager I want to be able to manage/assign Hypervisor(s) to Projects and/or Teams
+- As a Manager I want to be able to export All settings, Users, teams, projects, etc...  individually or globally.
+- As a security Officer I want to be able to enable 2FA, MFA or security Keys.
+- As a security Officer I want to be able to Force 2FA, MFA or security Keys.
+- As a security Officer I want to be able to enable/ disable API access.
+- As a security Officer I want to have a strong Token to be able to call API.
+- As a security Officer I want to be able to enable/ disable MCP feature.
+- As a security Officer I want to have a strong Token to be able to use MCP.
+- As a security Officer I want to an option to encrypt/decrypt export/import of Settings.
+- As a security Officer I want the passwords of local users ( eg: not SSO OAuth... ) to be encrypted (in the db)
+- As a security Officer I do not want any password of external Auth users to be stored locally.
+- As a Security Officer I want a login page
+- As a Security Officer I want a session timeout
+
+## Client management ( Dedicated web App PHASE 3 - Other project )
+
+- As a developer I want to be able to manage my client Licences (eg: pro features enabled )
+- As a developer I want a Landing page displaying info on the product:
+  - a "Resume/ general info on the product" Section
+  - a "What can It do for you ?" section
+  - a "Who uses it ?" Section Section
+- As a developer I want to manage Clients / Licences (do not reinvent, use Clerk)
