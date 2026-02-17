@@ -2,14 +2,17 @@
  * Run migrations. Executes SQL files in drizzle/ in order.
  * Usage: bun run scripts/migrate.ts
  */
-import { Database } from 'bun:sqlite'
+import { mkdirSync } from 'fs'
 import { readdir, readFile } from 'fs/promises'
-import { join } from 'path'
+import { dirname, join, resolve } from 'path'
+import { Database } from 'bun:sqlite'
 
 const dbPath = process.env.DATABASE_PATH ?? './data/vmgen.db'
-const migrationsDir = join(import.meta.dir, '../drizzle')
+const resolvedPath = resolve(process.cwd(), dbPath)
+mkdirSync(dirname(resolvedPath), { recursive: true })
 
-const db = new Database(dbPath)
+const migrationsDir = join(import.meta.dir, '../drizzle')
+const db = new Database(resolvedPath)
 const files = (await readdir(migrationsDir))
   .filter((f) => f.endsWith('.sql'))
   .sort()
