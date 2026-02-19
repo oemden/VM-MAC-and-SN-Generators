@@ -41,6 +41,8 @@ SQLite DB and migrations run automatically on first API startup. No manual setup
 - Navigate to **Saved** in the header
 - Filter by type (All / SN / MAC)
 - Table shows id, type, value, vm_name, comment, created_at
+- **Sort:** Click column headers (ID, Type, Value, VM, Created) to sort ascending/descending
+- **Delete:** Click Delete per row; confirm in modal before removal
 
 ### API base URL
 

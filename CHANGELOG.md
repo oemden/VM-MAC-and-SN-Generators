@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added - Web App
+
+- Saved Results: delete button per row with custom confirm modal
+- Saved Results: sortable column headers (ID, Type, Value, VM, Created); server-side sort
+
+### Added - API
+
+- DELETE /api/results/:id — 204 on success, 404 if not found
+- GET /api/results: sort and order params (`?sort=id|type|value|vm_name|created_at&order=asc|desc`)
+
 ### Fixed - API
 
 - SQLite: run migrations automatically on API startup; no manual `db:migrate` required. `bun run dev` is sufficient for dev and prod.
@@ -14,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Documentation
 
 - CLAUDE.md: added Database (SQLite) section with auto-init rule for new code
-- README.md: removed db:migrate step from run instructions
+- README.md: removed db:migrate step from run instructions; added Saved Results delete and sort usage
 
 ## [0.6.0] - 2026-02-17
 

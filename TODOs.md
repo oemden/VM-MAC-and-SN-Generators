@@ -26,6 +26,14 @@
   - [ ] `.env` for App project ( to come )
 - [ ] Add: `-C` "Custom 3 first bits" MAC Addresses option (POSTPONED, to be reassessed later)
 
+## Web App Phase 4 (Saved Results CRUD)
+
+- [x] Phase 4A: VM toggle (Assign to VM ON/OFF in MacGenerator and SnGenerator)
+- [x] SQLite auto-init on API startup (no manual db:migrate)
+- [x] Phase 4B: DELETE /api/results/:id
+- [x] Phase 4B: Delete button per row + custom confirm modal
+- [x] Phase 4B: Server-side sort (?sort=&order=) + sortable column headers
+
 ## Vendor data and future app
 
 - [ ] Define mac-vendor data file format and initial vendor list (e.g. vmware, apple, dell)
