@@ -33,6 +33,8 @@
 - [x] Phase 4B: DELETE /api/results/:id
 - [x] Phase 4B: Delete button per row + custom confirm modal
 - [x] Phase 4B: Server-side sort (?sort=&order=) + sortable column headers
+- [ ] Phase 4C: DELETE /api/vms/:id (cascade vs orphan)
+- [ ] Phase 4C: VM page (list VMs, delete with warning modal)
 
 ## Vendor data and future app
 

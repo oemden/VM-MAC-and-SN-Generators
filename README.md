@@ -2,7 +2,7 @@
 
 The scripts directory contains two utility scripts to generate unique identifiers for VMware virtual machines:
 
-**version**: `0.6.0`
+**version**: `0.7.0`
 
 - `generate_mac.sh` `genmac` - Generates valid VMware MAC addresses
 - `generate_sn.sh` `gensn` - Generates customizable serial numbers for VM identification

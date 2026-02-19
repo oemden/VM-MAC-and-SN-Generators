@@ -7,10 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-02-19
+
 ### Added - Web App
 
 - Saved Results: delete button per row with custom confirm modal
 - Saved Results: sortable column headers (ID, Type, Value, VM, Created); server-side sort
+- ConfirmModal: reusable component for destructive confirmations
 
 ### Added - API
 
@@ -19,12 +22,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed - API
 
+- SQLite: migration runner tolerates duplicate column/index (idempotent); fixes startup when DB was partially migrated
 - SQLite: run migrations automatically on API startup; no manual `db:migrate` required. `bun run dev` is sufficient for dev and prod.
 
 ### Documentation
 
 - CLAUDE.md: added Database (SQLite) section with auto-init rule for new code
 - README.md: removed db:migrate step from run instructions; added Saved Results delete and sort usage
+- docs/plans: Phase 4B design and implementation plan
 
 ## [0.6.0] - 2026-02-17
 

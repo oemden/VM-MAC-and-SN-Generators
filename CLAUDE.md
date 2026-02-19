@@ -27,6 +27,7 @@ The full-stack Architecture is to be defined.
 
 - **Auto-init on startup:** The API runs migrations automatically when the DB module loads. Users run `bun run dev` only; no manual `db:migrate` step.
 - **Rule:** After any new code fix or feature, ensure SQLite init remains automatic. Dev and prod must work with `bun run dev` (or equivalent) without SQL-related setup.
+- **Migration runner:** Runs statements one-by-one; tolerates "duplicate column name" and "already exists" for idempotent migrations.
 
 ## Code Style Guidelines
 
