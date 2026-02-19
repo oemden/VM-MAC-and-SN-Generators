@@ -18,9 +18,10 @@ The web app provides a UI to generate MAC addresses and Serial Numbers, save the
 
 ```bash
 bun install
-bun run db:migrate   # First run: create SQLite DB and tables
 bun run dev          # Starts API (port 3000) and web (port 5173)
 ```
+
+SQLite DB and migrations run automatically on first API startup. No manual setup required.
 
 ### Save to Virtual Machine
 

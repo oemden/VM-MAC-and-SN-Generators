@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed - API
+
+- SQLite: run migrations automatically on API startup; no manual `db:migrate` required. `bun run dev` is sufficient for dev and prod.
+
+### Documentation
+
+- CLAUDE.md: added Database (SQLite) section with auto-init rule for new code
+- README.md: removed db:migrate step from run instructions
+
 ## [0.6.0] - 2026-02-17
 
 ### Added - Web App
