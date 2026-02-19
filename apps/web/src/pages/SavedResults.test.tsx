@@ -42,4 +42,38 @@ describe('SavedResults', () => {
       expect(screen.queryByText('Loading...')).not.toBeInTheDocument()
     })
   })
+
+  it('should show delete button per row', async () => {
+    vi.mocked(fetch).mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        success: true,
+        results: [
+          { id: 1, type: 'mac', value: '00:50:56:00:00:01', vm_name: 'VM-001', comment: null, created_at: '2025-02-17T00:00:00Z' }
+        ]
+      })
+    } as Response)
+    render(
+      <MemoryRouter>
+        <SavedResults />
+      </MemoryRouter>
+    )
+    await waitFor(() => expect(screen.getByTestId('delete-1')).toBeInTheDocument())
+    expect(screen.getByTestId('delete-1')).toHaveTextContent('Delete')
+  })
+
+  it('should pass sort and order params to fetch', async () => {
+    vi.mocked(fetch).mockResolvedValue({
+      ok: true,
+      json: async () => ({ success: true, results: [] })
+    } as Response)
+    render(
+      <MemoryRouter>
+        <SavedResults />
+      </MemoryRouter>
+    )
+    await waitFor(() => expect(fetch).toHaveBeenCalled())
+    expect(fetch).toHaveBeenCalledWith(expect.stringContaining('sort=created_at'))
+    expect(fetch).toHaveBeenCalledWith(expect.stringContaining('order=desc'))
+  })
 })
