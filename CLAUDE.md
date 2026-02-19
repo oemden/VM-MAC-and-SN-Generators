@@ -23,6 +23,11 @@ The full-stack Architecture is to be defined.
 - Scripts: 2 bash scripts to generate mac addresses and Custom Serial Numbers
 - Use SQLite for basic settings, Plan migrations to be able to switch to SQL in future development.
 
+## Database (SQLite)
+
+- **Auto-init on startup:** The API runs migrations automatically when the DB module loads. Users run `bun run dev` only; no manual `db:migrate` step.
+- **Rule:** After any new code fix or feature, ensure SQLite init remains automatic. Dev and prod must work with `bun run dev` (or equivalent) without SQL-related setup.
+
 ## Code Style Guidelines
 
 - Syntax: Use ES Modules (`import`/`export`) rather than CommonJS. Use modern ES6+ features (arrow functions, etc.) where appropriate.

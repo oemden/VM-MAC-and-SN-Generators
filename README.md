@@ -18,9 +18,10 @@ The web app provides a UI to generate MAC addresses and Serial Numbers, save the
 
 ```bash
 bun install
-bun run db:migrate   # First run: create SQLite DB and tables
 bun run dev          # Starts API (port 3000) and web (port 5173)
 ```
+
+SQLite DB and migrations run automatically on first API startup. No manual setup required.
 
 ### Save to Virtual Machine
 
@@ -28,6 +29,12 @@ bun run dev          # Starts API (port 3000) and web (port 5173)
 - Select or type a VM name (create-on-fly supported)
 - Add an optional comment
 - One SN per VM; multiple MACs per VM allowed
+
+### Assign to VM toggle
+
+- In the **Options** panel, use the **Assign to VM** checkbox
+- **ON (default):** Shows VM combobox, Comment field, and Save button
+- **OFF:** Hides the save form; only Copy All and per-row Copy buttons are shown (copy-only mode)
 
 ### Saved Results page
 

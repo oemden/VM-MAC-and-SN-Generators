@@ -1,6 +1,7 @@
 /**
  * Integration tests for POST /api/results and GET /api/results.
- * Uses in-memory SQLite for isolation. Must set DATABASE_PATH before db import.
+ * Uses isolated SQLite DB. DATABASE_PATH must be set before db import.
+ * DB module auto-runs migrations on startup.
  */
 import { join } from 'path'
 import { mkdtempSync, rmSync } from 'fs'
@@ -10,23 +11,8 @@ const testDbDir = mkdtempSync(join(tmpdir(), 'vmgen-api-test-'))
 process.env.DATABASE_PATH = join(testDbDir, 'test.db')
 
 import { describe, expect, it, afterAll } from 'bun:test'
-import { Database } from 'bun:sqlite'
-import { readdir, readFile } from 'fs/promises'
-import { join as pathJoin } from 'path'
 
-// Run all migrations on test DB before importing app
-const db = new Database(process.env.DATABASE_PATH!)
-const migrationsDir = pathJoin(import.meta.dir, '../../drizzle')
-const files = (await readdir(migrationsDir))
-  .filter((f) => f.endsWith('.sql'))
-  .sort()
-for (const file of files) {
-  const sql = await readFile(pathJoin(migrationsDir, file), 'utf-8')
-  db.exec(sql)
-}
-db.close()
-
-// Now import app (db module will use DATABASE_PATH)
+// Import app; db module auto-runs migrations
 const { app } = await import('../index')
 
 afterAll(() => {
