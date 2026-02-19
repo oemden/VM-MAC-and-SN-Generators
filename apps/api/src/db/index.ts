@@ -29,7 +29,22 @@ async function runMigrations(db: Database): Promise<void> {
     const row = db.prepare('SELECT 1 FROM _migrations WHERE name = ?').get(file)
     if (row) continue
     const sql = await readFile(join(migrationsDir, file), 'utf-8')
-    db.exec(sql)
+    const statements = sql
+      .split(/;\s*\n/)
+      .map((s) => s.trim())
+      .filter(Boolean)
+    for (const stmt of statements) {
+      try {
+        db.exec(stmt + ';')
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : String(err)
+        if (msg.includes('duplicate column name') || msg.includes('already exists')) {
+          // Already applied; skip
+        } else {
+          throw err
+        }
+      }
+    }
     db.prepare('INSERT INTO _migrations (name) VALUES (?)').run(file)
   }
 }
