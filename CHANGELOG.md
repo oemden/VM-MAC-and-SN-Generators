@@ -18,6 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.6.0] - 2026-02-17
 
+### Fixed - Web App
+
+- SavedResults.test.tsx: wrap async state updates in waitFor to eliminate React act() warning
+
 ### Added - Web App
 
 - Save UI: VM combobox (select or create-on-fly), comment field, Save to Virtual Machine button
@@ -33,6 +37,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - MacGenerator and SnGenerator: two-column layout with SaveResultsForm in results panel
+
+### Documentation
+
+- UserStories (in .local/userstories): added [x] to completed user stories (landing page, Generate, theme, copy, save with comments, VM combobox, business rules, etc.)
 
 ## [0.4.0] - 2026-02-04
 

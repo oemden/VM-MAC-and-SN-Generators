@@ -27,7 +27,7 @@ describe('SavedResults', () => {
     expect(screen.getByText('00:50:56:00:00:01')).toBeInTheDocument()
   })
 
-  it('should show Saved Results heading', () => {
+  it('should show Saved Results heading', async () => {
     vi.mocked(fetch).mockResolvedValue({
       ok: true,
       json: async () => ({ success: true, results: [] })
@@ -38,5 +38,8 @@ describe('SavedResults', () => {
       </MemoryRouter>
     )
     expect(screen.getByRole('heading', { name: /saved results/i })).toBeInTheDocument()
+    await waitFor(() => {
+      expect(screen.queryByText('Loading...')).not.toBeInTheDocument()
+    })
   })
 })
