@@ -15,6 +15,7 @@ interface SnOptions {
   delimiter: string
   noPrefix: boolean
   noDelimiter: boolean
+  assignToVm: boolean
 }
 
 export function SnGenerator() {
@@ -26,7 +27,8 @@ export function SnGenerator() {
     case: 'upper',
     delimiter: '-',
     noPrefix: false,
-    noDelimiter: false
+    noDelimiter: false,
+    assignToVm: true
   })
   const [results, setResults] = useState<SnResult[]>([])
   const [loading, setLoading] = useState(false)
@@ -229,6 +231,22 @@ export function SnGenerator() {
               />
             </div>
           </div>
+
+          <div className="form-row">
+            <div className="form-group">
+              <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <input
+                  type="checkbox"
+                  checked={options.assignToVm}
+                  onChange={(e) =>
+                    setOptions({ ...options, assignToVm: e.target.checked })
+                  }
+                  aria-label="Assign to VM"
+                />
+                Assign to VM
+              </label>
+            </div>
+          </div>
             </div>
           )}
 
@@ -276,12 +294,14 @@ export function SnGenerator() {
                   ))}
                 </div>
               </div>
-              <div className="save-results-section">
-                <SaveResultsForm
-                  type="sn"
-                  values={results.map((r) => r.sn)}
-                />
-              </div>
+              {options.assignToVm && (
+                <div className="save-results-section">
+                  <SaveResultsForm
+                    type="sn"
+                    values={results.map((r) => r.sn)}
+                  />
+                </div>
+              )}
             </>
           )}
         </div>

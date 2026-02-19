@@ -29,6 +29,12 @@ bun run dev          # Starts API (port 3000) and web (port 5173)
 - Add an optional comment
 - One SN per VM; multiple MACs per VM allowed
 
+### Assign to VM toggle
+
+- In the **Options** panel, use the **Assign to VM** checkbox
+- **ON (default):** Shows VM combobox, Comment field, and Save button
+- **OFF:** Hides the save form; only Copy All and per-row Copy buttons are shown (copy-only mode)
+
 ### Saved Results page
 
 - Navigate to **Saved** in the header

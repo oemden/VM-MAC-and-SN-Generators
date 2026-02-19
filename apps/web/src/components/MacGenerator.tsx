@@ -13,6 +13,7 @@ interface MacOptions {
   case: 'upper' | 'lower' | 'both'
   delimiter: string
   random: boolean
+  assignToVm: boolean
 }
 
 export function MacGenerator() {
@@ -20,7 +21,8 @@ export function MacGenerator() {
     count: 1,
     case: 'lower',
     delimiter: ':',
-    random: false
+    random: false,
+    assignToVm: true
   })
   const [results, setResults] = useState<MacResult[]>([])
   const [loading, setLoading] = useState(false)
@@ -165,6 +167,22 @@ export function MacGenerator() {
                   </select>
                 </div>
               </div>
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <input
+                      type="checkbox"
+                      checked={options.assignToVm}
+                      onChange={(e) =>
+                        setOptions({ ...options, assignToVm: e.target.checked })
+                      }
+                      aria-label="Assign to VM"
+                    />
+                    Assign to VM
+                  </label>
+                </div>
+              </div>
             </div>
           )}
 
@@ -212,12 +230,14 @@ export function MacGenerator() {
                   ))}
                 </div>
               </div>
-              <div className="save-results-section">
-                <SaveResultsForm
-                  type="mac"
-                  values={results.map((r) => r.mac)}
-                />
-              </div>
+              {options.assignToVm && (
+                <div className="save-results-section">
+                  <SaveResultsForm
+                    type="mac"
+                    values={results.map((r) => r.mac)}
+                  />
+                </div>
+              )}
             </>
           )}
         </div>
