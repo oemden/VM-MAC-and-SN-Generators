@@ -1,5 +1,5 @@
 import { Hono } from 'hono'
-import { and, desc, eq } from 'drizzle-orm'
+import { and, asc, desc, eq } from 'drizzle-orm'
 import { db, schema } from '../db'
 import {
   validateSaveResultsBody,
@@ -94,12 +94,35 @@ results.post('/', async (c) => {
   }
 })
 
+/** DELETE /api/results/:id — Delete a saved result */
+results.delete('/:id', async (c) => {
+  try {
+    const id = parseInt(c.req.param('id'), 10)
+    if (isNaN(id)) {
+      return c.json({ error: 'Invalid id' }, 400)
+    }
+    const deleted = await db
+      .delete(schema.savedResults)
+      .where(eq(schema.savedResults.id, id))
+      .returning({ id: schema.savedResults.id })
+    if (deleted.length === 0) {
+      return c.body(null, 404)
+    }
+    return c.body(null, 204)
+  } catch (error) {
+    console.error('Delete result error:', error)
+    return c.json({ error: 'Internal server error' }, 500)
+  }
+})
+
 /** GET /api/results — List saved results with optional filters */
 results.get('/', async (c) => {
   try {
     const typeParam = c.req.query('type')
     const limitParam = c.req.query('limit')
     const offsetParam = c.req.query('offset')
+    const sortParam = c.req.query('sort')
+    const orderParam = c.req.query('order')
 
     const type = typeParam === 'sn' || typeParam === 'mac' ? typeParam : undefined
     const limit = Math.min(
@@ -107,6 +130,22 @@ results.get('/', async (c) => {
       RESULTS_LIMIT_MAX
     )
     const offset = Math.max(parseInt(offsetParam ?? '0', 10) || 0, 0)
+
+    const validSortColumns = ['id', 'type', 'value', 'vm_name', 'created_at'] as const
+    const sort =
+      sortParam && validSortColumns.includes(sortParam as (typeof validSortColumns)[number])
+        ? (sortParam as (typeof validSortColumns)[number])
+        : 'created_at'
+    const order = orderParam === 'asc' ? asc : desc
+
+    const sortColumnMap = {
+      id: schema.savedResults.id,
+      type: schema.savedResults.type,
+      value: schema.savedResults.value,
+      vm_name: schema.savedResults.vmName,
+      created_at: schema.savedResults.createdAt
+    } as const
+    const orderByColumn = sortColumnMap[sort]
 
     const resultsList = await db
       .select({
@@ -122,7 +161,7 @@ results.get('/', async (c) => {
       .from(schema.savedResults)
       .leftJoin(schema.vms, eq(schema.savedResults.vmId, schema.vms.id))
       .where(type ? eq(schema.savedResults.type, type) : undefined)
-      .orderBy(desc(schema.savedResults.createdAt))
+      .orderBy(order(orderByColumn))
       .limit(limit)
       .offset(offset)
 

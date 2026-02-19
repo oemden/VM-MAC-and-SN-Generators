@@ -126,6 +126,32 @@ describe('POST /api/results', () => {
   })
 })
 
+describe('DELETE /api/results/:id', () => {
+  it('should return 204 when record exists', async () => {
+    const postRes = await app.request('/api/results', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type: 'mac', values: ['00:11:22:33:44:77'] })
+    })
+    expect(postRes.status).toBe(201)
+    const { ids } = await postRes.json()
+    const id = ids[0]
+
+    const res = await app.request(`/api/results/${id}`, { method: 'DELETE' })
+    expect(res.status).toBe(204)
+  })
+
+  it('should return 404 when record does not exist', async () => {
+    const res = await app.request('/api/results/999999', { method: 'DELETE' })
+    expect(res.status).toBe(404)
+  })
+
+  it('should return 400 for invalid id', async () => {
+    const res = await app.request('/api/results/abc', { method: 'DELETE' })
+    expect(res.status).toBe(400)
+  })
+})
+
 describe('GET /api/results', () => {
   it('should return 200 with results list', async () => {
     const res = await app.request('/api/results')
@@ -156,6 +182,17 @@ describe('GET /api/results', () => {
     expect(res.status).toBe(200)
     const json = await res.json()
     expect(json.results.length).toBeLessThanOrEqual(1)
+  })
+
+  it('should accept sort and order params', async () => {
+    const res = await app.request('/api/results?sort=id&order=asc')
+    expect(res.status).toBe(200)
+    const json = await res.json()
+    expect(json.success).toBe(true)
+    expect(Array.isArray(json.results)).toBe(true)
+    for (let i = 1; i < json.results.length; i++) {
+      expect(json.results[i].id).toBeGreaterThanOrEqual(json.results[i - 1].id)
+    }
   })
 })
 
