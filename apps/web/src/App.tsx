@@ -3,6 +3,7 @@ import { Link, Routes, Route } from 'react-router-dom'
 import { MacGenerator } from './components/MacGenerator'
 import { SnGenerator } from './components/SnGenerator'
 import { SavedResults } from './pages/SavedResults'
+import { Vms } from './pages/Vms'
 
 type Theme = 'light' | 'dark' | 'system'
 
@@ -46,6 +47,7 @@ function App() {
         <nav style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
           <Link to="/">Generate</Link>
           <Link to="/saved">Saved</Link>
+          <Link to="/vms">VMs</Link>
           <button className="theme-toggle" onClick={cycleTheme}>
           {getThemeIcon()}
         </button>
@@ -64,6 +66,7 @@ function App() {
             }
           />
           <Route path="/saved" element={<SavedResults />} />
+          <Route path="/vms" element={<Vms />} />
         </Routes>
       </main>
 
