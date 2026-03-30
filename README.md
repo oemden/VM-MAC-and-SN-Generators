@@ -48,6 +48,22 @@ SQLite DB and migrations run automatically on first API startup. No manual setup
 
 Set `VITE_API_URL` in `.env` if the API runs on a different host (default: `http://localhost:3000`).
 
+### Docker (dev, live reload)
+
+Run the same stack as local `bun run dev` inside a container with the repo bind-mounted so edits reload. SQLite data uses the `vmgen-data` volume. Hostname inside the container is `vmgen`.
+
+```bash
+docker compose build
+docker compose up
+```
+
+From the repository root.
+
+- Web UI: `http://127.0.0.1:5560` (Vite in the container, port 5173)
+- API: `http://127.0.0.1:3060` (in-container port 3000)
+
+After changing `package.json` or `bun.lock`, rebuild the image (`docker compose build`) so dependencies stay in sync.
+
 ---
 
 ## Context

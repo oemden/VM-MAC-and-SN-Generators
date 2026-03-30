@@ -92,5 +92,7 @@ console.log(`API server starting on port ${port}`)
 export { app }
 export default {
   port,
+  // Listen on all interfaces so Docker port publishing works (hostname is separate).
+  hostname: '0.0.0.0',
   fetch: app.fetch
 }

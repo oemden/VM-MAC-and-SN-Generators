@@ -1,0 +1,24 @@
+services:
+  vmgen:
+    build: .
+    image: vmgen:dev
+    container_name: vmgen
+    hostname: vmgen
+    ports:
+      - '127.0.0.1:5560:5173'
+      - '127.0.0.1:3060:3000'
+    environment:
+      API_PORT: '3000'
+      # Browser on host talks to published API port (not 3000 on host).
+      VITE_API_URL: http://127.0.0.1:3060
+      NODE_ENV: development
+    volumes:
+      - .:/app
+      - vmgen-node-modules:/app/node_modules
+      - vmgen-data:/app/apps/api/data
+    stdin_open: true
+    tty: true
+
+volumes:
+  vmgen-node-modules:
+  vmgen-data:

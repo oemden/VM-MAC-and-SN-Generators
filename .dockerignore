@@ -1,0 +1,23 @@
+# Dependencies and build outputs (rebuilt in image)
+node_modules
+**/node_modules
+apps/web/dist
+apps/api/dist
+packages/core/dist
+
+# Git and local tooling
+.git
+.gitignore
+.local
+**/.local
+
+# Env files (pass via compose if needed)
+.env
+.env.*
+!.env.example
+
+# IDE and tests (not needed for runtime image)
+**/*.test.ts
+**/*.test.tsx
+**/coverage
+.cursor

@@ -1,5 +1,5 @@
 /// <reference types="bun" />
-import { mkdirSync } from 'fs'
+import { existsSync, mkdirSync } from 'fs'
 import { readdir, readFile } from 'fs/promises'
 import { dirname, join, resolve } from 'path'
 import { Database } from 'bun:sqlite'
@@ -21,7 +21,12 @@ async function runMigrations(db: Database): Promise<void> {
       name TEXT PRIMARY KEY
     )
   `)
-  const migrationsDir = join(import.meta.dir, '../../drizzle')
+  // src/db: ../../drizzle -> apps/api/drizzle; bundled dist/index.js: ../drizzle -> apps/api/drizzle
+  const migrationsFromSrcTree = join(import.meta.dir, '../../drizzle')
+  const migrationsFromDistBundle = join(import.meta.dir, '../drizzle')
+  const migrationsDir = existsSync(migrationsFromSrcTree)
+    ? migrationsFromSrcTree
+    : migrationsFromDistBundle
   const files = (await readdir(migrationsDir))
     .filter((f) => f.endsWith('.sql'))
     .sort()
