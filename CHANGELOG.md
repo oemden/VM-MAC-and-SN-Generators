@@ -7,6 +7,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added - Scripts (Unification)
+
+- `vmgen.sh`: Unified wrapper script that auto-detects MAC or SN generation from arguments
+- `generate_mac.sh`: Added `--no-delimiter` flag for consistency with SN script
+- `generate_sn.sh`: Added `--no-suffix` flag
+- `generate_sn.sh`: Changed type-specific options to uppercase: `-l` → `-L` (length), `-p` → `-P` (prefix), `-s` → `-S` (suffix)
+- `generate_sn.sh`: No-value behavior for `-L`, `-P`, `-S` now equals their `--no-*` flags
+- `install.sh`: Added `vmgen` installation support
+
+### Changed - Scripts
+
+- `generate_mac.sh`: Enhanced all error messages with standardized format (Error, Input, Valid, Hint)
+- `generate_sn.sh`: Enhanced all error messages with standardized format
+- `generate_sn.sh`: Added conflict detection for `-P value` + `--no-prefix`, `-S value` + `--no-suffix`, `-d char` + `--no-delimiter`
+- `generate_sn.sh`: Added delimiter length validation
+- `generate_mac.sh`: Added conflict detection for `-T` + `-R`
+
+### Fixed - Scripts
+
+- `generate_sn.sh`: `-d` with no value now treated as `--no-delimiter` (was setting empty delimiter)
+- `generate_sn.sh`: `-p` with no value now treated as `--no-prefix` (was setting empty prefix)
+- `generate_sn.sh`: `-s` with no value now treated as `--no-suffix` (was setting empty suffix)
+
+### Documentation
+
+- README.md: Added `vmgen.sh` section with usage examples
+- README.md: Updated `generate_mac.sh` options to include `--no-delimiter`
+- README.md: Updated `generate_sn.sh` options to use uppercase `-L`, `-P`, `-S`
+- README.md: Updated all examples to use new option format
+- README.md: Updated Installation section to include `vmgen`
+- README.md: Added Deprecation Notices section
+- docs/plans: Added `vmgen-wrapper-design.md` comprehensive plan
+
 ### Added - Web App (Phase 4C)
 
 - VMs page at `/vms`: list VMs, delete button per row
