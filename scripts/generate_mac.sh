@@ -2,8 +2,9 @@
 # Generate valid VMware static MAC addresses by default
 # Valid range for VMware static MACs: 00:50:56:00:00:00 to 00:50:56:3F:FF:FF
 # v0.4.0: Added -T/--target and -R/--random options. See CHANGELOG.md for details
+# v0.5.0: Added --no-delimiter flag, enhanced error messages
 
-version="0.4.0"
+version="0.5.0"
 
 # Display help and usage information
 show_help() {
@@ -20,6 +21,7 @@ OPTIONS:
                          - both: Output MAC in both lowercase and uppercase
     -n, --count NUM       Number of MAC addresses to generate (default: 1)
     -d, --delimiter DELIM Delimiter between MAC octets (single character or 'none', default: ':')
+    --no-delimiter        Disable delimiter (equivalent to -d none)
     -T, --target TYPE     Vendor/target type (currently: vmware; default: vmware)
     -R, --random          Random unicast, locally-administered MACs (lab-safe, non-vendor)
 
@@ -63,6 +65,7 @@ COUNT=1
 DELIM=":"
 TARGET="vmware"   # vendor/target type (currently only vmware)
 RANDOM_LAB=0      # when set to 1, generate random local/lab MACs
+TARGET_EXPLICIT=0 # track if -T was explicitly provided
 
 # Parse command-line arguments
 while [[ $# -gt 0 ]]; do
@@ -79,8 +82,13 @@ while [[ $# -gt 0 ]]; do
             DELIM="$2"
             shift 2
             ;;
+        --no-delimiter)
+            DELIM=""
+            shift
+            ;;
         -T|--target)
             TARGET="$2"
+            TARGET_EXPLICIT=1
             shift 2
             ;;
         -R|--random)
@@ -92,8 +100,10 @@ while [[ $# -gt 0 ]]; do
             shift 2
             ;;
         *)
-            echo "Error: Unknown option: $1"
-            echo "Use -h or --help for usage information"
+            echo "Error: Unknown option" >&2
+            echo "  Input: '$1'" >&2
+            echo "  Valid: -h, -c, -n, -d, --no-delimiter, -T, -R" >&2
+            echo "  Hint: Use -h or --help for usage information" >&2
             exit 1
             ;;
     esac
@@ -101,35 +111,51 @@ done
 
 # Validate case option
 if [[ "$CASE" != "upper" && "$CASE" != "lower" && "$CASE" != "both" ]]; then
-    echo "Error: Case must be 'upper', 'lower', or 'both'"
+    echo "Error: Invalid case value for MAC generation" >&2
+    echo "  Input: '$CASE'" >&2
+    echo "  Valid: upper, lower, both" >&2
+    echo "  Hint: Use -c upper, -c lower, or -c both" >&2
     exit 1
 fi
 
 # Validate delimiter option
 # - allow a single-character delimiter like ':', '-', '.', ';'
 # - allow special keyword 'none' to disable delimiters between octets
+# - allow empty string (set by --no-delimiter)
 if [[ "$DELIM" == "none" ]]; then
     DELIM=""
-elif [[ ${#DELIM} -ne 1 ]]; then
-    echo "Error: Delimiter must be a single character or 'none'"
+elif [[ -n "$DELIM" && ${#DELIM} -ne 1 ]]; then
+    echo "Error: Delimiter must be a single character or 'none'" >&2
+    echo "  Input: '$DELIM'" >&2
+    echo "  Valid: any single character, or 'none'" >&2
+    echo "  Hint: Use -d '.' or -d none" >&2
     exit 1
 fi
 
 # Validate target option (for now only vmware is supported)
 if [[ "$TARGET" != "vmware" ]]; then
-    echo "Error: Unsupported target type '$TARGET' (supported: vmware)"
+    echo "Error: Unsupported target type for MAC generation" >&2
+    echo "  Input: '$TARGET'" >&2
+    echo "  Valid: vmware" >&2
+    echo "  Hint: Use -T vmware (currently only supported target)" >&2
     exit 1
 fi
 
 # Do not allow combining -T and -R to keep behavior explicit
-if [[ "$RANDOM_LAB" -eq 1 && "$TARGET" != "vmware" ]]; then
-    echo "Error: Cannot combine -T/--target with -R/--random"
+if [[ "$TARGET_EXPLICIT" -eq 1 && "$RANDOM_LAB" -eq 1 ]]; then
+    echo "Error: Cannot combine -T and -R options" >&2
+    echo "  Input: -T $TARGET -R" >&2
+    echo "  Valid: Use -T OR -R, not both" >&2
+    echo "  Hint: Choose one target type" >&2
     exit 1
 fi
 
 # Validate count option
 if ! [[ "$COUNT" =~ ^[0-9]+$ ]] || [ "$COUNT" -lt 1 ]; then
-    echo "Error: Count must be a positive number"
+    echo "Error: Count must be a positive integer" >&2
+    echo "  Input: '$COUNT'" >&2
+    echo "  Valid: 1, 2, 3, ..." >&2
+    echo "  Hint: Use -n with a number >= 1" >&2
     exit 1
 fi
 
