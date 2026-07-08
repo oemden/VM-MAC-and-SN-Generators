@@ -1,5 +1,5 @@
 #!/bin/bash
-# genvm.sh - Unified wrapper for generate_mac.sh and generate_sn.sh
+# genvm - Unified wrapper for genmac and gensn
 # Detects type from arguments and calls appropriate script(s)
 # Version: 1.0.0
 
@@ -11,7 +11,7 @@ Generate MAC addresses, serial numbers, or both for VMware VMs.
 Type is auto-detected from arguments. With no arguments, generates 1 MAC address.
 
 Default behavior (no arguments):
-  Generates 1 VMware MAC address (same as: generate_mac.sh with no arguments)
+  Generates 1 VMware MAC address (same as: genmac with no arguments)
 
 To generate SN only, use SN-specific options (-L, -P, -S).
 To generate both, use both MAC and SN options.
@@ -70,7 +70,7 @@ fi
 # Default behavior: no args = generate 1 MAC address
 if [[ $# -eq 0 ]]; then
     # Generate 1 VMware MAC address (default behavior)
-    exec "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/generate_mac.sh"
+    exec "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/genmac"
 fi
 
 # Track which types to generate
@@ -190,18 +190,18 @@ if $GENERATE_MAC; then
     
     if ! $has_target; then
         # Add default -T vmware if no MAC-specific args other than flags
-        # Actually, just pass as-is and let generate_mac.sh handle defaults
-        : # No default needed, generate_mac.sh has its own defaults
+        # Actually, just pass as-is and let genmac handle defaults
+        : # No default needed, genmac has its own defaults
     fi
     
-    # Execute generate_mac.sh
-    cmd=( "$SCRIPT_DIR/generate_mac.sh" "${COMMON_ARGS_FILTERED[@]}" "${MAC_ARGS[@]}" )
+    # Execute genmac
+    cmd=( "$SCRIPT_DIR/genmac" "${COMMON_ARGS_FILTERED[@]}" "${MAC_ARGS[@]}" )
     "${cmd[@]}"
 fi
 
 # Generate serial numbers if requested
 if $GENERATE_SN; then
-    # Execute generate_sn.sh
-    cmd=( "$SCRIPT_DIR/generate_sn.sh" "${COMMON_ARGS_FILTERED[@]}" "${SN_ARGS[@]}" )
+    # Execute gensn
+    cmd=( "$SCRIPT_DIR/gensn" "${COMMON_ARGS_FILTERED[@]}" "${SN_ARGS[@]}" )
     "${cmd[@]}"
 fi
