@@ -11,7 +11,7 @@ Usage: $0 [OPTIONS]
 
 Generate customizable serial numbers with configurable format version ${version}.
 
-SERIAL NUMBER OPTIONS (use uppercase):
+SERIAL NUMBER OPTIONS:
     -L, --length NUM      Length of random part (default: 6)
     -P, --prefix STR      Prefix string (default: "VM")
     -S, --suffix STR      Suffix string (default: "SRV")
@@ -25,16 +25,10 @@ COMMON OPTIONS:
     --no-delimiter        Disable delimiter
     -h, --help            Show this help
 
-DEPRECATED OPTIONS (use uppercase versions):
-    -l, --length          Use -L instead (prints warning)
-    -p, --prefix          Use -P instead (prints warning)
-    -s, --suffix          Use -S instead (prints warning)
-
-ARGUMENT BEHAVIOR:
-    Using -L, -P, or -S with no value is equivalent to their --no-* flags:
-        -L with no value = --no-delimiter
-        -P with no value = --no-prefix
-        -S with no value = --no-suffix
+NOTE: Using -L, -P, or -S with no value is equivalent to their --no-* flags:
+    -L with no value = --no-delimiter
+    -P with no value = --no-prefix
+    -S with no value = --no-suffix
 
 EXAMPLES:
     $0 -L 9 -c mixed
