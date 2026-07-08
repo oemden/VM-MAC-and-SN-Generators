@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 # VM-MAC-and-SN-Generators
-# Install script for generate_mac.sh and generate_sn.sh
+# Install script for generate_mac.sh, generate_sn.sh, and vmgen.sh
 # This script copies the project scripts into /usr/local/bin
-# so they can be used as simple commands: genmac and gensn.
+# so they can be used as simple commands: genmac, gensn, and vmgen.
 # v0.4.0: See CHANGELOG.md for details
+# v0.5.0: Added vmgen.sh unified wrapper
 
-version="0.4.0"
+version="0.5.0"
 
 set -euo pipefail
 
@@ -14,9 +15,11 @@ PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 SRC_GENMAC="${PROJECT_DIR}/generate_mac.sh"
 SRC_GENSN="${PROJECT_DIR}/generate_sn.sh"
+SRC_VMGEN="${PROJECT_DIR}/vmgen.sh"
 
 TARGET_GENMAC="${INSTALL_DIR}/genmac"
 TARGET_GENSN="${INSTALL_DIR}/gensn"
+TARGET_VMGEN="${INSTALL_DIR}/vmgen"
 
 echo "=== VM MAC and SN Generators installer v${version} ==="
 echo ""
@@ -31,6 +34,12 @@ fi
 if [[ ! -f "${SRC_GENSN}" ]]; then
   echo "Error: ${SRC_GENSN} not found."
   echo "Please run this installer from the project root where generate_sn.sh exists."
+  exit 1
+fi
+
+if [[ ! -f "${SRC_VMGEN}" ]]; then
+  echo "Error: ${SRC_VMGEN} not found."
+  echo "Please run this installer from the project root where vmgen.sh exists."
   exit 1
 fi
 
@@ -62,12 +71,21 @@ sudo cp "${SRC_GENSN}" "${TARGET_GENSN}"
 sudo chmod +x "${TARGET_GENSN}"
 echo "Installed gensn  -> ${TARGET_GENSN}"
 
+# Install vmgen.sh as vmgen
+if [[ -e "${TARGET_VMGEN}" ]]; then
+  echo "Notice: ${TARGET_VMGEN} already exists and will be overwritten."
+fi
+sudo cp "${SRC_VMGEN}" "${TARGET_VMGEN}"
+sudo chmod +x "${TARGET_VMGEN}"
+echo "Installed vmgen   -> ${TARGET_VMGEN}"
+
 echo ""
 echo "=== Installation complete ==="
 echo ""
 echo "You can now run:"
 echo "  genmac  # VMware MAC address generator"
 echo "  gensn   # VMware serial number generator"
+echo "  vmgen   # Unified MAC/SN generator"
 echo ""
 
 # Suggest how to refresh the shell's command cache
