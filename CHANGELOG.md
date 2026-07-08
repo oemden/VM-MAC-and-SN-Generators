@@ -19,6 +19,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed - Scripts
 
 - `generate_mac.sh`: Enhanced all error messages with standardized format (Error, Input, Valid, Hint)
+- `genvm.sh`: Simplified default behavior to call `generate_mac.sh` without arguments
+
+### Fixed - Scripts
 - `generate_sn.sh`: Enhanced all error messages with standardized format
 - `generate_sn.sh`: Added conflict detection for `-P value` + `--no-prefix`, `-S value` + `--no-suffix`, `-d char` + `--no-delimiter`
 - `generate_sn.sh`: Added delimiter length validation
@@ -26,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed - Scripts
 
+- `genvm.sh`: Default behavior now delegates to `generate_mac.sh` without passing arguments
 - `generate_sn.sh`: `-d` with no value now treated as `--no-delimiter` (was setting empty delimiter)
 - `generate_sn.sh`: `-p` with no value now treated as `--no-prefix` (was setting empty prefix)
 - `generate_sn.sh`: `-s` with no value now treated as `--no-suffix` (was setting empty suffix)
