@@ -115,6 +115,7 @@ Generates valid VMware static MAC addresses within the allowed range for manual 
                       - both: Output MAC in both lowercase and uppercase
 -n, --count NUM       Number of MAC addresses to generate (default: 1)
 -d, --delimiter DELIM Delimiter between MAC octets (single character or 'none', default: ':')
+--no-delimiter        Disable delimiter (equivalent to -d none)
 -T, --target TYPE     Vendor/target type (currently: vmware; default: vmware)
 -R, --random          Random unicast, locally-administered MACs (lab-safe, non-vendor)
 ```
@@ -249,14 +250,15 @@ Generates customizable serial numbers for VMware VMs. These serial numbers can b
 ### Options
 
 ```bash
--l, --length NUM      Length of random part (default: 6)
--p, --prefix STR      Prefix string (default: "VM")
--s, --suffix STR      Suffix string (default: none)
+-L, --length NUM      Length of random part (default: 6)
+-P, --prefix STR      Prefix string (default: "VM")
+-S, --suffix STR      Suffix string (default: "SRV")
 -c, --case TYPE       Character case: upper, lower, mixed (default: upper)
 -n, --count NUM       Number of serial numbers to generate (default: 1)
 -d, --delimiter CHAR  Delimiter between parts (default: "-")
 --no-prefix           Don't add prefix
---no-delimiter        Don't use delimiter
+--no-suffix           Don't add suffix
+--no-delimiter        Disable delimiter
 -h, --help            Show help
 ```
 
@@ -272,14 +274,14 @@ VM-A1B2C3
 #### Generate VM Serial Numbers with Mixed Case
 
 ```bash
-$ ./generate_sn.sh -l 9 -c mixed
+$ ./generate_sn.sh -L 9 -c mixed
 VM-aB3cD4eF5
 ```
 
 #### Generate Debian VM Serial Numbers
 
 ```bash
-$ ./generate_sn.sh -p "VM" -l 4 -s "DEBIAN13" -n 3
+$ ./generate_sn.sh -P "VM" -L 4 -S "DEBIAN13" -n 3
 VM-1234-DEBIAN13
 VM-5A6B-DEBIAN13
 VM-7C8D-DEBIAN13
@@ -288,7 +290,7 @@ VM-7C8D-DEBIAN13
 #### Generate Production Environment Serial Numbers
 
 ```bash
-$ ./generate_sn.sh -p "DEB" -l 6 -s "PROD" -c mixed -n 2
+$ ./generate_sn.sh -P "DEB" -L 6 -S "PROD" -c mixed -n 2
 DEB-F71Cn8-PROD
 DEB-B5cz88-PROD
 ```
@@ -296,7 +298,7 @@ DEB-B5cz88-PROD
 #### Generate Server Serial Numbers (Compact Format)
 
 ```bash
-$ ./generate_sn.sh -p "SRV" -l 10 --no-delimiter -c upper -n 2
+$ ./generate_sn.sh -P "SRV" -L 10 --no-delimiter -c upper -n 2
 SRVD4730MB0WY
 SRVJ7V1V5CSX5
 ```
@@ -304,7 +306,7 @@ SRVJ7V1V5CSX5
 #### Generate Random Identifiers (No Prefix)
 
 ```bash
-$ ./generate_sn.sh --no-prefix -l 8 -c lower -n 2
+$ ./generate_sn.sh --no-prefix -L 8 -c lower -n 2
 1ct61x80
 8n4d29n4
 ```
@@ -312,7 +314,7 @@ $ ./generate_sn.sh --no-prefix -l 8 -c lower -n 2
 #### Generate Multiple Serial Numbers for Bulk Deployment
 
 ```bash
-$ ./generate_sn.sh -p "HQ" -l 8 -s "LAB" -n 5
+$ ./generate_sn.sh -P "HQ" -L 8 -S "LAB" -n 5
 HQ-A1B2C3D4-LAB
 HQ-E5F6G7H8-LAB
 HQ-I9J0K1L2-LAB
@@ -323,15 +325,70 @@ HQ-Q7R8S9T0-LAB
 #### Custom Delimiter
 
 ```bash
-$ ./generate_sn.sh -p "VM" -l 6 -d "_" -s "TEST"
+$ ./generate_sn.sh -P "VM" -L 6 -d "_" -S "TEST"
 VM_A1B2C3_TEST
+```
+
+---
+
+## vmgen.sh - Unified Wrapper
+
+A single command that can generate MAC addresses, serial numbers, or both.
+Type is automatically detected from the arguments provided.
+
+### Quick Start
+
+```bash
+# Generate MAC addresses
+vmgen.sh -n 3 -T vmware
+
+# Generate serial numbers  
+vmgen.sh -n 2 -P DEB -L 6 -S PROD
+
+# Generate both MAC and SN in one command
+vmgen.sh -n 2 -T vmware -P VM -L 6
+```
+
+### Type Detection
+
+The wrapper automatically detects what to generate based on the arguments:
+
+| Arguments | Generates |
+|-----------|-----------|
+| `-T`, `-R` | MAC addresses only |
+| `-L`, `-P`, `-S`, `--no-prefix`, `--no-suffix` | Serial numbers only |
+| Both types | Both MAC and SN |
+
+### Options
+
+**MAC-specific:** `-T`, `--target`, `-R`, `--random`  
+**SN-specific:** `-L`, `--length`, `-P`, `--prefix`, `-S`, `--suffix`, `--no-prefix`, `--no-suffix`  
+**Common:** `-h`, `--help`, `-n`, `--count`, `-c`, `--case`, `-d`, `--delimiter`, `--no-delimiter`
+
+### Examples
+
+```bash
+# Generate 3 VMware MAC addresses
+vmgen.sh -n 3 -T vmware -c lower
+
+# Generate 5 serial numbers for Debian production
+vmgen.sh -n 5 -P DEB -L 8 -S PROD -c upper
+
+# Generate both for a new VM
+vmgen.sh -n 1 -T vmware -P VM -L 8 -c lower
+
+# Generate MAC with compact format
+vmgen.sh -n 1 -T vmware --no-delimiter
+
+# Generate SN without prefix or suffix
+vmgen.sh -n 1 -L 10 --no-prefix --no-suffix
 ```
 
 ---
 
 ## Installation
 
-To install the scripts as convenient commands (`genmac` and `gensn`) available system-wide:
+To install all utilities as convenient commands system-wide:
 
 ```bash
 cd /path/to/VM-MAC-and-SN-Generators
@@ -343,13 +400,15 @@ This will:
 
 - Copy `generate_mac.sh` to `/usr/local/bin/genmac`
 - Copy `generate_sn.sh` to `/usr/local/bin/gensn`
-- Overwrite existing `/usr/local/bin/genmac` or `/usr/local/bin/gensn` if they are already present
+- Copy `vmgen.sh` to `/usr/local/bin/vmgen`
+- Overwrite existing commands if they are already present
 
 After installation you can run:
 
 ```bash
 genmac --help
 gensn --help
+vmgen --help
 ```
 
 If the commands are not immediately available in your current shell, either:
@@ -436,11 +495,36 @@ NB: I ususally used `SMBIOS.use12CharSerialNumber` for my mac VMs.
 ./generate_mac.sh --help
 
 # Generate serial numbers for Debian production VMs
-./generate_sn.sh -p "DEB" -l 6 -s "PROD" -c upper -n 5
+./generate_sn.sh -P "DEB" -L 6 -S "PROD" -c upper -n 5
 
 # Generate serial numbers for test environment (compact format)
-./generate_sn.sh -p "TST" -l 8 --no-delimiter -n 3
+./generate_sn.sh -P "TST" -L 8 --no-delimiter -n 3
 
 # View all serial number options
 ./generate_sn.sh --help
 ```
+
+---
+
+## Deprecation Notices
+
+### generate_sn.sh Argument Changes
+
+The following lowercase options are **deprecated** but still work with a warning message:
+
+| Deprecated | Replacement | Status |
+|------------|-------------|--------|
+| `-l` | `-L` | Deprecated, prints warning |
+| `-p` | `-P` | Deprecated, prints warning |
+| `-s` | `-S` | Deprecated, prints warning |
+
+**Migration:** Update your scripts to use uppercase options. The deprecated lowercase options will be removed in a future version.
+
+### Argument Behavior Notes
+
+For `generate_sn.sh`, using `-L`, `-P`, or `-S` with no value is equivalent to their `--no-*` flags:
+- `-L` with no value = `--no-delimiter`
+- `-P` with no value = `--no-prefix`
+- `-S` with no value = `--no-suffix`
+
+This behavior is intentional and documented.
