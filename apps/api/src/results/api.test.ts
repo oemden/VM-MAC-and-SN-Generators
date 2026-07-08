@@ -242,4 +242,104 @@ describe('GET /api/vms', () => {
       expect(json.vms[0]).toHaveProperty('created_at')
     }
   })
+
+  it('should include associated_count for each VM', async () => {
+    const createRes = await app.request('/api/vms', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: 'vm-count-test' })
+    })
+    expect(createRes.status).toBe(201)
+    const { id: vmId } = await createRes.json()
+
+    await app.request('/api/results', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: 'sn',
+        values: ['SN-COUNT'],
+        vm_id: vmId
+      })
+    })
+
+    const res = await app.request('/api/vms')
+    expect(res.status).toBe(200)
+    const json = await res.json()
+    const vm = json.vms.find((v: { id: number }) => v.id === vmId)
+    expect(vm).toBeDefined()
+    expect(vm.associated_count).toBe(1)
+  })
+})
+
+describe('DELETE /api/vms/:id', () => {
+  it('should return 204 when VM exists and has no results', async () => {
+    const createRes = await app.request('/api/vms', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: 'vm-delete-empty' })
+    })
+    expect(createRes.status).toBe(201)
+    const { id } = await createRes.json()
+    const res = await app.request(`/api/vms/${id}`, { method: 'DELETE' })
+    expect(res.status).toBe(204)
+  })
+
+  it('should return 404 when VM does not exist', async () => {
+    const res = await app.request('/api/vms/999999', { method: 'DELETE' })
+    expect(res.status).toBe(404)
+  })
+
+  it('should return 400 for invalid id', async () => {
+    const res = await app.request('/api/vms/abc', { method: 'DELETE' })
+    expect(res.status).toBe(400)
+  })
+
+  it('should orphan results when cascade not set', async () => {
+    const createRes = await app.request('/api/vms', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: 'vm-orphan-test' })
+    })
+    const { id: vmId } = await createRes.json()
+    await app.request('/api/results', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: 'mac',
+        values: ['00:11:22:33:44:88'],
+        vm_id: vmId
+      })
+    })
+    const delRes = await app.request(`/api/vms/${vmId}`, { method: 'DELETE' })
+    expect(delRes.status).toBe(204)
+    const listRes = await app.request('/api/results')
+    const json = await listRes.json()
+    const r = json.results.find((x: { value: string }) => x.value === '00:11:22:33:44:88')
+    expect(r).toBeDefined()
+    expect(r.vm_name).toBeFalsy()
+  })
+
+  it('should cascade delete results when cascade=true', async () => {
+    const createRes = await app.request('/api/vms', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: 'vm-cascade-test' })
+    })
+    const { id: vmId } = await createRes.json()
+    await app.request('/api/results', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: 'mac',
+        values: ['00:11:22:33:44:99'],
+        vm_id: vmId
+      })
+    })
+    const delRes = await app.request(`/api/vms/${vmId}?cascade=true`, { method: 'DELETE' })
+    expect(delRes.status).toBe(204)
+    const listRes = await app.request('/api/results')
+    const json = await listRes.json()
+    const found = json.results.find((r: { value: string }) => r.value === '00:11:22:33:44:99')
+    expect(found).toBeUndefined()
+  })
 })

@@ -13,7 +13,7 @@ describe('App', () => {
     expect(screen.getByRole('heading', { name: /vm generator/i })).toBeInTheDocument()
   })
 
-  it('should render Generate and Saved links', () => {
+  it('should render Generate, Saved, and VMs links', () => {
     render(
       <MemoryRouter>
         <App />
@@ -21,5 +21,6 @@ describe('App', () => {
     )
     expect(screen.getByRole('link', { name: /generate/i })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /saved/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /vms/i })).toBeInTheDocument()
   })
 })

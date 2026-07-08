@@ -1,5 +1,5 @@
 import { Hono } from 'hono'
-import { asc, eq } from 'drizzle-orm'
+import { asc, eq, sql } from 'drizzle-orm'
 import { db, schema } from '../db'
 import { createVmBodySchema } from './validation'
 
@@ -11,9 +11,26 @@ vms.get('/', async (c) => {
       .select()
       .from(schema.vms)
       .orderBy(asc(schema.vms.name))
+
+    const counts = await db
+      .select({
+        vmId: schema.savedResults.vmId,
+        count: sql<number>`count(*)`.as('count')
+      })
+      .from(schema.savedResults)
+      .where(sql`${schema.savedResults.vmId} IS NOT NULL`)
+      .groupBy(schema.savedResults.vmId)
+
+    const countMap = Object.fromEntries(counts.map((r) => [r.vmId!, r.count]))
+
     return c.json({
       success: true,
-      vms: list.map((v) => ({ id: v.id, name: v.name, created_at: v.createdAt }))
+      vms: list.map((v) => ({
+        id: v.id,
+        name: v.name,
+        created_at: v.createdAt,
+        associated_count: countMap[v.id] ?? 0
+      }))
     })
   } catch (error) {
     console.error('List VMs error:', error)
@@ -51,6 +68,37 @@ vms.post('/', async (c) => {
     )
   } catch (error) {
     console.error('Create VM error:', error)
+    return c.json({ error: 'Internal server error' }, 500)
+  }
+})
+
+vms.delete('/:id', async (c) => {
+  try {
+    const id = parseInt(c.req.param('id'), 10)
+    if (isNaN(id)) {
+      return c.json({ error: 'Invalid id' }, 400)
+    }
+    const existing = await db
+      .select({ id: schema.vms.id })
+      .from(schema.vms)
+      .where(eq(schema.vms.id, id))
+      .limit(1)
+    if (existing.length === 0) {
+      return c.body(null, 404)
+    }
+    const cascade = c.req.query('cascade') === 'true'
+    if (cascade) {
+      await db.delete(schema.savedResults).where(eq(schema.savedResults.vmId, id))
+    } else {
+      await db
+        .update(schema.savedResults)
+        .set({ vmId: null, vmName: null })
+        .where(eq(schema.savedResults.vmId, id))
+    }
+    await db.delete(schema.vms).where(eq(schema.vms.id, id))
+    return c.body(null, 204)
+  } catch (error) {
+    console.error('Delete VM error:', error)
     return c.json({ error: 'Internal server error' }, 500)
   }
 })

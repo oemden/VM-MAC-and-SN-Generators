@@ -36,6 +36,12 @@ SQLite DB and migrations run automatically on first API startup. No manual setup
 - **ON (default):** Shows VM combobox, Comment field, and Save button
 - **OFF:** Hides the save form; only Copy All and per-row Copy buttons are shown (copy-only mode)
 
+### VMs page
+
+- Navigate to **VMs** in the header
+- Table shows id, name, created_at
+- **Delete:** Click Delete per row. If VM has no associated results, a simple confirm appears. If VM has results (SN/MAC), a modal offers: Keep results (orphan), Delete all (cascade), or Cancel
+
 ### Saved Results page
 
 - Navigate to **Saved** in the header
