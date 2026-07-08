@@ -67,12 +67,13 @@ if [[ "$1" == "-h" ]] || [[ "$1" == "--help" ]]; then
     exit 0
 fi
 
-# Default behavior: no args = generate 1 MAC and 1 SN
+# Default behavior: no args = generate 1 MAC and 1 SN on same line
 if [[ $# -eq 0 ]]; then
     # Generate 1 VMware MAC address and 1 serial number (default behavior)
     SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    "$SCRIPT_DIR/genmac"
-    "$SCRIPT_DIR/gensn"
+    MAC=$("$SCRIPT_DIR/genmac")
+    SN=$("$SCRIPT_DIR/gensn")
+    echo "${MAC} - ${SN}"
     exit 0
 fi
 
@@ -167,7 +168,13 @@ if [[ ${#SN_ARGS[@]} -gt 0 ]]; then
     GENERATE_SN=true
 fi
 
-# Error if neither type specified
+# Default to both if only common args provided (like -n 3)
+if ! ($GENERATE_MAC || $GENERATE_SN) && [[ ${#COMMON_ARGS_FILTERED[@]} -gt 0 ]]; then
+    GENERATE_MAC=true
+    GENERATE_SN=true
+fi
+
+# Error if neither type specified and no common args
 if ! ($GENERATE_MAC || $GENERATE_SN); then
     echo "Error: Must specify type via MAC options (-T, -R) or SN options (-L, -P, -S)" >&2
     echo "  Input: $(echo "$@" | tr '\n' ' ')" >&2
@@ -179,32 +186,28 @@ fi
 # Resolve script directory
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Generate MAC addresses if requested
-default_target=""
-if $GENERATE_MAC; then
-    # Check if -T or -R is in MAC_ARGS, if not add default
-    has_target=false
-    for arg in "${MAC_ARGS[@]}"; do
-        if [[ "$arg" == "-T" || "$arg" == "--target" || "$arg" == "-R" || "$arg" == "--random" ]]; then
-            has_target=true
-            break
-        fi
-    done
-    
-    if ! $has_target; then
-        # Add default -T vmware if no MAC-specific args other than flags
-        # Actually, just pass as-is and let genmac handle defaults
-        : # No default needed, genmac has its own defaults
+# Count how many to generate
+COUNT=1
+for ((i=0; i<${#COMMON_ARGS_FILTERED[@]}; i+=2)); do
+    if [[ "${COMMON_ARGS_FILTERED[i]}" == "-n" || "${COMMON_ARGS_FILTERED[i]}" == "--count" ]]; then
+        COUNT="${COMMON_ARGS_FILTERED[i+1]}"
     fi
-    
-    # Execute genmac
+done
+
+# Generate output
+if $GENERATE_MAC && $GENERATE_SN; then
+    # Generate both MAC and SN, combined on same line
+    for ((i=0; i<COUNT; i++)); do
+        MAC=$("$SCRIPT_DIR/genmac" "${COMMON_ARGS_FILTERED[@]}" "${MAC_ARGS[@]}" | sed -n "${i+1}p")
+        SN=$("$SCRIPT_DIR/gensn" "${COMMON_ARGS_FILTERED[@]}" "${SN_ARGS[@]}" | sed -n "${i+1}p")
+        echo "${MAC} - ${SN}"
+    done
+elif $GENERATE_MAC; then
+    # Generate MAC only
     cmd=( "$SCRIPT_DIR/genmac" "${COMMON_ARGS_FILTERED[@]}" "${MAC_ARGS[@]}" )
     "${cmd[@]}"
-fi
-
-# Generate serial numbers if requested
-if $GENERATE_SN; then
-    # Execute gensn
+elif $GENERATE_SN; then
+    # Generate SN only
     cmd=( "$SCRIPT_DIR/gensn" "${COMMON_ARGS_FILTERED[@]}" "${SN_ARGS[@]}" )
     "${cmd[@]}"
 fi
