@@ -1,5 +1,5 @@
 #!/bin/bash
-# vmgen.sh - Unified wrapper for generate_mac.sh and generate_sn.sh
+# genvm.sh - Unified wrapper for generate_mac.sh and generate_sn.sh
 # Detects type from arguments and calls appropriate script(s)
 # Version: 1.0.0
 
@@ -8,7 +8,13 @@ show_help() {
 Usage: $0 [MAC_OPTIONS | SN_OPTIONS | COMMON_OPTIONS]
 
 Generate MAC addresses, serial numbers, or both for VMware VMs.
-Type is auto-detected from arguments.
+Type is auto-detected from arguments. With no arguments, generates 1 MAC address.
+
+Default behavior (no arguments):
+  Generates 1 VMware MAC address (equivalent to: $0 -n 1 -T vmware)
+
+To generate SN only, use SN-specific options (-L, -P, -S).
+To generate both, use both MAC and SN options.
 
 MAC-SPECIFIC OPTIONS:
     -T, --target TYPE     Vendor/target type (default: vmware)
@@ -34,6 +40,9 @@ TYPE DETECTION:
     Both: MAC + SN options
 
 EXAMPLES:
+    # Generate 1 VMware MAC address (default with no arguments)
+    $0
+
     # Generate 3 VMware MAC addresses
     $0 -n 3 -T vmware
 
@@ -52,10 +61,16 @@ EXAMPLES:
 EOF
 }
 
-# Check if help requested with no other args
-if [[ $# -eq 0 ]] || [[ "$1" == "-h" ]] || [[ "$1" == "--help" ]]; then
+# Check if help requested
+if [[ "$1" == "-h" ]] || [[ "$1" == "--help" ]]; then
     show_help
     exit 0
+fi
+
+# Default behavior: no args = generate 1 MAC address
+if [[ $# -eq 0 ]]; then
+    # Generate 1 VMware MAC address (default behavior)
+    exec "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/generate_mac.sh" -n 1 -T vmware
 fi
 
 # Track which types to generate

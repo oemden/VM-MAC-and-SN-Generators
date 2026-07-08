@@ -1,4 +1,4 @@
-# VMGen Wrapper Design Plan
+# GenVM Wrapper Design Plan
 
 **Status:** Draft  
 **Author:** Mistral Vibe  
@@ -530,7 +530,7 @@ fi
 - [ ] Error messages are clear and actionable
 
 ### Phase 2: Wrapper (Optional)
-- [ ] Create vmgen.sh
+- [ ] Create genvm.sh
 - [ ] Test wrapper with all combinations
 - [ ] Update README.md with wrapper docs
 - [ ] Update install.sh
@@ -569,7 +569,7 @@ Phase 1: Update Scripts (REQUIRED)
     └── Clear error outputs verified
 
 Phase 2: Wrapper (OPTIONAL)
-├── Create vmgen.sh
+├── Create genvm.sh
 ├── Test combinations
 └── Document
 ```

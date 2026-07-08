@@ -9,12 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added - Scripts (Unification)
 
-- `vmgen.sh`: Unified wrapper script that auto-detects MAC or SN generation from arguments
+- `genvm.sh`: Unified wrapper script that auto-detects MAC or SN generation from arguments
 - `generate_mac.sh`: Added `--no-delimiter` flag for consistency with SN script
 - `generate_sn.sh`: Added `--no-suffix` flag
 - `generate_sn.sh`: Changed type-specific options to uppercase: `-l` → `-L` (length), `-p` → `-P` (prefix), `-s` → `-S` (suffix)
 - `generate_sn.sh`: No-value behavior for `-L`, `-P`, `-S` now equals their `--no-*` flags
-- `install.sh`: Added `vmgen` installation support
+- `install.sh`: Added `genvm` installation support
 
 ### Changed - Scripts
 
@@ -32,13 +32,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Documentation
 
-- README.md: Added `vmgen.sh` section with usage examples
+- README.md: Added `genvm.sh` section with usage examples
 - README.md: Updated `generate_mac.sh` options to include `--no-delimiter`
 - README.md: Updated `generate_sn.sh` options to use uppercase `-L`, `-P`, `-S`
 - README.md: Updated all examples to use new option format
-- README.md: Updated Installation section to include `vmgen`
+- README.md: Updated Installation section to include `genvm`
 - README.md: Added Deprecation Notices section
-- docs/plans: Added `vmgen-wrapper-design.md` comprehensive plan
+- docs/plans: Added `genvm-wrapper-design.md` comprehensive plan
 
 ### Added - Web App (Phase 4C)
 

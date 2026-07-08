@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # VM-MAC-and-SN-Generators
-# Install script for generate_mac.sh, generate_sn.sh, and vmgen.sh
+# Install script for generate_mac.sh, generate_sn.sh, and genvm.sh
 # This script copies the project scripts into /usr/local/bin
-# so they can be used as simple commands: genmac, gensn, and vmgen.
+# so they can be used as simple commands: genmac, gensn, and genvm.
 # v0.4.0: See CHANGELOG.md for details
-# v0.5.0: Added vmgen.sh unified wrapper
+# v0.5.0: Added genvm.sh unified wrapper
 
 version="0.5.0"
 
@@ -15,11 +15,11 @@ PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 SRC_GENMAC="${PROJECT_DIR}/generate_mac.sh"
 SRC_GENSN="${PROJECT_DIR}/generate_sn.sh"
-SRC_VMGEN="${PROJECT_DIR}/vmgen.sh"
+SRC_GENVM="${PROJECT_DIR}/genvm.sh"
 
 TARGET_GENMAC="${INSTALL_DIR}/genmac"
 TARGET_GENSN="${INSTALL_DIR}/gensn"
-TARGET_VMGEN="${INSTALL_DIR}/vmgen"
+TARGET_GENVM="${INSTALL_DIR}/genvm"
 
 echo "=== VM MAC and SN Generators installer v${version} ==="
 echo ""
@@ -37,9 +37,9 @@ if [[ ! -f "${SRC_GENSN}" ]]; then
   exit 1
 fi
 
-if [[ ! -f "${SRC_VMGEN}" ]]; then
-  echo "Error: ${SRC_VMGEN} not found."
-  echo "Please run this installer from the project root where vmgen.sh exists."
+if [[ ! -f "${SRC_GENVM}" ]]; then
+  echo "Error: ${SRC_GENVM} not found."
+  echo "Please run this installer from the project root where genvm.sh exists."
   exit 1
 fi
 
@@ -71,13 +71,13 @@ sudo cp "${SRC_GENSN}" "${TARGET_GENSN}"
 sudo chmod +x "${TARGET_GENSN}"
 echo "Installed gensn  -> ${TARGET_GENSN}"
 
-# Install vmgen.sh as vmgen
-if [[ -e "${TARGET_VMGEN}" ]]; then
-  echo "Notice: ${TARGET_VMGEN} already exists and will be overwritten."
+# Install genvm.sh as genvm
+if [[ -e "${TARGET_GENVM}" ]]; then
+  echo "Notice: ${TARGET_GENVM} already exists and will be overwritten."
 fi
-sudo cp "${SRC_VMGEN}" "${TARGET_VMGEN}"
-sudo chmod +x "${TARGET_VMGEN}"
-echo "Installed vmgen   -> ${TARGET_VMGEN}"
+sudo cp "${SRC_GENVM}" "${TARGET_GENVM}"
+sudo chmod +x "${TARGET_GENVM}"
+echo "Installed genvm   -> ${TARGET_GENVM}"
 
 echo ""
 echo "=== Installation complete ==="
@@ -85,7 +85,7 @@ echo ""
 echo "You can now run:"
 echo "  genmac  # VMware MAC address generator"
 echo "  gensn   # VMware serial number generator"
-echo "  vmgen   # Unified MAC/SN generator"
+echo "  genvm   # Unified MAC/SN generator"
 echo ""
 
 # Suggest how to refresh the shell's command cache

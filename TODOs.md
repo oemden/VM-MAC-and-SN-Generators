@@ -5,7 +5,7 @@
 - [x] Create an install script to install scripts in `/usr/local/bin/`
   - `generate_mac.sh` target alias `/usr/local/bin/genmac`
   - `generate_sn.sh` target alias  `/usr/local/bin/gensn`
-  - `vmgen.sh` target alias `/usr/local/bin/vmgen`
+  - `genvm.sh` target alias `/usr/local/bin/genvm`
 
 ## Scripts Unification (Phase 1 - COMPLETE)
 
@@ -43,7 +43,7 @@
 - [x] Added delimiter length validation
 - [x] Removed deprecated options from help text (still work with warnings)
 
-### vmgen.sh (Unified Wrapper)
+### genvm.sh (Unified Wrapper)
 - [x] Created unified wrapper script
 - [x] Auto-detects type from arguments (-T/-R for MAC, -L/-P/-S for SN)
 - [x] Can generate MAC only, SN only, or both in one command
@@ -51,7 +51,7 @@
 - [x] Provides unified help and error messages
 
 ### install.sh
-- [x] Updated to install vmgen
+- [x] Updated to install genvm
 - [x] Updated version to 0.5.0
 
 ## Web App Phase 4 (Saved Results CRUD)
@@ -66,7 +66,7 @@
 
 ## Documentation
 
-- [x] Update README.md with vmgen.sh section
+- [x] Update README.md with genvm.sh section
 - [x] Update README.md generate_mac.sh options
 - [x] Update README.md generate_sn.sh options
 - [x] Update README.md examples

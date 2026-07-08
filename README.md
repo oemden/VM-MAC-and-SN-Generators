@@ -331,7 +331,7 @@ VM_A1B2C3_TEST
 
 ---
 
-## vmgen.sh - Unified Wrapper
+## genvm.sh - Unified Wrapper
 
 A single command that can generate MAC addresses, serial numbers, or both.
 Type is automatically detected from the arguments provided.
@@ -340,13 +340,13 @@ Type is automatically detected from the arguments provided.
 
 ```bash
 # Generate MAC addresses
-vmgen.sh -n 3 -T vmware
+genvm.sh -n 3 -T vmware
 
 # Generate serial numbers  
-vmgen.sh -n 2 -P DEB -L 6 -S PROD
+genvm.sh -n 2 -P DEB -L 6 -S PROD
 
 # Generate both MAC and SN in one command
-vmgen.sh -n 2 -T vmware -P VM -L 6
+genvm.sh -n 2 -T vmware -P VM -L 6
 ```
 
 ### Type Detection
@@ -359,6 +359,8 @@ The wrapper automatically detects what to generate based on the arguments:
 | `-L`, `-P`, `-S`, `--no-prefix`, `--no-suffix` | Serial numbers only |
 | Both types | Both MAC and SN |
 
+**Default behavior:** With no arguments, generates 1 VMware MAC address.
+
 ### Options
 
 **MAC-specific:** `-T`, `--target`, `-R`, `--random`  
@@ -368,20 +370,23 @@ The wrapper automatically detects what to generate based on the arguments:
 ### Examples
 
 ```bash
+# Generate 1 VMware MAC address (default with no arguments)
+genvm.sh
+
 # Generate 3 VMware MAC addresses
-vmgen.sh -n 3 -T vmware -c lower
+genvm.sh -n 3 -T vmware -c lower
 
 # Generate 5 serial numbers for Debian production
-vmgen.sh -n 5 -P DEB -L 8 -S PROD -c upper
+genvm.sh -n 5 -P DEB -L 8 -S PROD -c upper
 
 # Generate both for a new VM
-vmgen.sh -n 1 -T vmware -P VM -L 8 -c lower
+genvm.sh -n 1 -T vmware -P VM -L 8 -c lower
 
 # Generate MAC with compact format
-vmgen.sh -n 1 -T vmware --no-delimiter
+genvm.sh -n 1 -T vmware --no-delimiter
 
 # Generate SN without prefix or suffix
-vmgen.sh -n 1 -L 10 --no-prefix --no-suffix
+genvm.sh -n 1 -L 10 --no-prefix --no-suffix
 ```
 
 ---
@@ -400,7 +405,7 @@ This will:
 
 - Copy `generate_mac.sh` to `/usr/local/bin/genmac`
 - Copy `generate_sn.sh` to `/usr/local/bin/gensn`
-- Copy `vmgen.sh` to `/usr/local/bin/vmgen`
+- Copy `genvm.sh` to `/usr/local/bin/genvm`
 - Overwrite existing commands if they are already present
 
 After installation you can run:
@@ -408,7 +413,7 @@ After installation you can run:
 ```bash
 genmac --help
 gensn --help
-vmgen --help
+genvm --help
 ```
 
 If the commands are not immediately available in your current shell, either:
