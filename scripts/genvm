@@ -11,7 +11,7 @@ Generate MAC addresses, serial numbers, or both for VMware VMs.
 Type is auto-detected from arguments. With no arguments, generates 1 MAC address.
 
 Default behavior (no arguments):
-  Generates 1 VMware MAC address (same as: genmac with no arguments)
+  Generates 1 VMware MAC address and 1 serial number (same as: genmac + gensn with no arguments)
 
 To generate SN only, use SN-specific options (-L, -P, -S).
 To generate both, use both MAC and SN options.
@@ -67,10 +67,13 @@ if [[ "$1" == "-h" ]] || [[ "$1" == "--help" ]]; then
     exit 0
 fi
 
-# Default behavior: no args = generate 1 MAC address
+# Default behavior: no args = generate 1 MAC and 1 SN
 if [[ $# -eq 0 ]]; then
-    # Generate 1 VMware MAC address (default behavior)
-    exec "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/genmac"
+    # Generate 1 VMware MAC address and 1 serial number (default behavior)
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    "$SCRIPT_DIR/genmac"
+    "$SCRIPT_DIR/gensn"
+    exit 0
 fi
 
 # Track which types to generate
