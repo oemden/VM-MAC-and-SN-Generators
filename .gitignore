@@ -48,3 +48,5 @@ apps/api/data/
 *.heic
 *.heif
 *.heif-s
+
+_bmad/
