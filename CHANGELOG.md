@@ -10,35 +10,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added - Scripts (Unification)
 
 - `genvm.sh`: Unified wrapper script that auto-detects MAC or SN generation from arguments
-- `generate_mac.sh`: Added `--no-delimiter` flag for consistency with SN script
-- `generate_sn.sh`: Added `--no-suffix` flag
-- `generate_sn.sh`: Changed type-specific options to uppercase: `-l` → `-L` (length), `-p` → `-P` (prefix), `-s` → `-S` (suffix)
-- `generate_sn.sh`: No-value behavior for `-L`, `-P`, `-S` now equals their `--no-*` flags
+- `genmac`: Added `--no-delimiter` flag for consistency with SN script
+- `gensn`: Added `--no-suffix` flag
+- `gensn`: Changed type-specific options to uppercase: `-l` → `-L` (length), `-p` → `-P` (prefix), `-s` → `-S` (suffix)
+- `gensn`: No-value behavior for `-L`, `-P`, `-S` now equals their `--no-*` flags
 - `install.sh`: Added `genvm` installation support
 
 ### Changed - Scripts
 
-- `generate_mac.sh`: Enhanced all error messages with standardized format (Error, Input, Valid, Hint)
-- `genvm.sh`: Simplified default behavior to call `generate_mac.sh` without arguments
+- `genmac`: Enhanced all error messages with standardized format (Error, Input, Valid, Hint)
+- `genvm.sh`: Simplified default behavior to call `genmac` without arguments
 
 ### Fixed - Scripts
-- `generate_sn.sh`: Enhanced all error messages with standardized format
-- `generate_sn.sh`: Added conflict detection for `-P value` + `--no-prefix`, `-S value` + `--no-suffix`, `-d char` + `--no-delimiter`
-- `generate_sn.sh`: Added delimiter length validation
-- `generate_mac.sh`: Added conflict detection for `-T` + `-R`
+- `gensn`: Enhanced all error messages with standardized format
+- `gensn`: Added conflict detection for `-P value` + `--no-prefix`, `-S value` + `--no-suffix`, `-d char` + `--no-delimiter`
+- `gensn`: Added delimiter length validation
+- `genmac`: Added conflict detection for `-T` + `-R`
 
 ### Fixed - Scripts
 
-- `genvm.sh`: Default behavior now delegates to `generate_mac.sh` without passing arguments
-- `generate_sn.sh`: `-d` with no value now treated as `--no-delimiter` (was setting empty delimiter)
-- `generate_sn.sh`: `-p` with no value now treated as `--no-prefix` (was setting empty prefix)
-- `generate_sn.sh`: `-s` with no value now treated as `--no-suffix` (was setting empty suffix)
+- `genvm.sh`: Default behavior now delegates to `genmac` without passing arguments
+- `gensn`: `-d` with no value now treated as `--no-delimiter` (was setting empty delimiter)
+- `gensn`: `-p` with no value now treated as `--no-prefix` (was setting empty prefix)
+- `gensn`: `-s` with no value now treated as `--no-suffix` (was setting empty suffix)
 
 ### Documentation
 
 - README.md: Added `genvm.sh` section with usage examples
-- README.md: Updated `generate_mac.sh` options to include `--no-delimiter`
-- README.md: Updated `generate_sn.sh` options to use uppercase `-L`, `-P`, `-S`
+- README.md: Updated `genmac` options to include `--no-delimiter`
+- README.md: Updated `gensn` options to use uppercase `-L`, `-P`, `-S`
 - README.md: Updated all examples to use new option format
 - README.md: Updated Installation section to include `genvm`
 - README.md: Added Deprecation Notices section
@@ -113,7 +113,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.4.0] - 2026-02-04
 
-### Added - generate_mac.sh
+### Added - genmac
 
 - Added `-T, --target TYPE` option to specify vendor/target type (currently supports `vmware`, default behavior)
 - Added `-R, --random` option to generate random unicast, locally-administered MAC addresses for lab use
@@ -123,7 +123,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Documentation
 
 - Created `mac-unicast.md` explaining unicast vs multicast MAC addresses and why scripts only generate unicast MACs
-- Updated `generate_mac.sh` help text with `-T` and `-R` option descriptions and examples
+- Updated `genmac` help text with `-T` and `-R` option descriptions and examples
 - Updated `README.md` to document `-T` and `-R` options with usage examples
 - Added "Unicast vs Random Lab MACs" section in README with link to `mac-unicast.md`
 - Updated `TODOs.md` to mark `-T` and `-R` features as completed and added vendor data/app planning section
@@ -133,13 +133,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added - install.sh
 
 - Added `install.sh` script to install project utilities into `/usr/local/bin`
-- `generate_mac.sh` is installed as `/usr/local/bin/genmac`
-- `generate_sn.sh` is installed as `/usr/local/bin/gensn`
+- `genmac` is installed as `/usr/local/bin/genmac`
+- `gensn` is installed as `/usr/local/bin/gensn`
 - Existing `genmac` and `gensn` binaries are overwritten with a clear notice
 
 ### Changed
 
-- Bumped `generate_mac.sh` and `generate_sn.sh` script versions to `0.3.0`
+- Bumped `genmac` and `gensn` script versions to `0.3.0`
 
 ### Documentation
 
@@ -148,20 +148,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.2.0] - 2026-02-04
 
-### Added - generate_mac.sh
+### Added - genmac
 
 - Added `-d, --delimiter` option to control the delimiter between MAC address octets
 - Added validation for delimiter values (single character or `none` for no delimiter)
 
 ### Documentation
 
-- Updated `generate_mac.sh` help text with delimiter option description and examples
+- Updated `genmac` help text with delimiter option description and examples
 - Updated `README.md` to document the delimiter option and provide usage examples
 - Marked the corresponding TODO item for the delimiter feature as completed
 
 ## [0.1.0] - 2024-12-19
 
-### Added - generate_mac.sh
+### Added - genmac
 
 - Added command-line options support (`-h`, `-c/--case`, `-n/--count`)
 - Added `-h, --help` option to display usage and examples
@@ -174,7 +174,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added comprehensive help function with usage examples
 - Updated script version to 0.1.0
 
-### Changed - generate_mac.sh
+### Changed - genmac
 
 - Replaced positional argument parsing with proper option parsing using `while` loop
 - Changed default output format to lowercase for cloudinit compatibility
@@ -192,11 +192,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Initial release of `generate_mac.sh` script
+- Initial release of `genmac` script
   - Generates valid VMware static MAC addresses
   - Supports positional argument for count
   - Uppercase output format
-- Initial release of `generate_sn.sh` script
+- Initial release of `gensn` script
   - Generates customizable serial numbers for VMware VMs
   - Configurable length, prefix, suffix, case, and delimiter options
 - Project documentation in README.md

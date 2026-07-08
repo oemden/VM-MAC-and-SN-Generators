@@ -4,8 +4,8 @@ The scripts directory contains two utility scripts to generate unique identifier
 
 **version**: `0.7.0`
 
-- `generate_mac.sh` `genmac` - Generates valid VMware MAC addresses
-- `generate_sn.sh` `gensn` - Generates customizable serial numbers for VM identification
+- `genmac` `genmac` - Generates valid VMware MAC addresses
+- `gensn` `gensn` - Generates customizable serial numbers for VM identification
 - **Web App** - React + API: generate MAC/SN, save to VMs, view saved results
 
 ---
@@ -81,20 +81,20 @@ Using custom Serial Numbers for the VM also Helps defining what usage or stage (
 
 You can find two utility scripts to generate unique identifiers for VMware virtual machines:
 
-- `generate_mac.sh` `genmac` - Generates valid VMware MAC addresses
+- `genmac` `genmac` - Generates valid VMware MAC addresses
 
 This allows me to define and control what IP a VM will have from start and even before setting up a fixed IP. Usefull to know in advance the IP assigned and manage DNS upward too.
 This script has some options to output MAC addresses in uppper or lowercase, and to set the count of MAC addresses to generate.
 Defaults to VMWare compatible MACs for now, but I plan to add custom/random generation in the future.
 
-- `generate_sn.sh` `gensn` - Generates customizable serial numbers for VM identification
+- `gensn` `gensn` - Generates customizable serial numbers for VM identification
 
 This script has some options to generate different nomenclatures of SNs.
 You can Set Prefixes or Suffixes like `DEV` or `PROD` in the *Serial Number*, which happens to be most usefull for VM Inventory or Monitoring
 
 Refer below to basic usage and Options of both scripts.
 
-## generate_mac.sh
+## genmac
 
 ### Purpose
 
@@ -124,31 +124,31 @@ Generates valid VMware static MAC addresses within the allowed range for manual 
 
 ```bash
 # Generate 1 MAC address (default, lowercase for cloudinit compatibility)
-./generate_mac.sh
+./genmac
 
 # Generate multiple MAC addresses
-./generate_mac.sh -n 5
+./genmac -n 5
 
 # Generate MAC addresses in uppercase
-./generate_mac.sh -c upper -n 3
+./genmac -c upper -n 3
 
 # Generate MAC address in both lowercase and uppercase
-./generate_mac.sh -c both
+./genmac -c both
 
 # Generate MAC addresses with a custom delimiter between octets
-./generate_mac.sh -d '-'
+./genmac -d '-'
 
 # Generate MAC addresses without delimiters between octets
-./generate_mac.sh -d none
+./genmac -d none
 
 # Generate explicit VMware-targeted MAC address (same as default behavior)
-./generate_mac.sh -T vmware
+./genmac -T vmware
 
 # Generate random unicast, locally-administered MAC address for lab use
-./generate_mac.sh -R
+./genmac -R
 
 # Show help
-./generate_mac.sh -h
+./genmac -h
 ```
 
 ### Examples
@@ -156,14 +156,14 @@ Generates valid VMware static MAC addresses within the allowed range for manual 
 #### Basic Usage (Default Settings)
 
 ```bash
-$ ./generate_mac.sh
+$ ./genmac
 00:50:56:28:6e:35
 ```
 
 #### Generate Multiple MAC Addresses
 
 ```bash
-$ ./generate_mac.sh -n 3
+$ ./genmac -n 3
 00:50:56:28:6e:35
 00:50:56:3b:c1:87
 00:50:56:0e:14:da
@@ -172,7 +172,7 @@ $ ./generate_mac.sh -n 3
 #### Generate Uppercase MAC Addresses
 
 ```bash
-$ ./generate_mac.sh -c upper -n 2
+$ ./genmac -c upper -n 2
 00:50:56:28:6E:35
 00:50:56:3B:C1:87
 ```
@@ -180,7 +180,7 @@ $ ./generate_mac.sh -c upper -n 2
 #### Generate MAC Address in Both Cases
 
 ```bash
-$ ./generate_mac.sh -c both
+$ ./genmac -c both
 00:50:56:28:6e:35
 00:50:56:28:6E:35
 ```
@@ -188,7 +188,7 @@ $ ./generate_mac.sh -c both
 #### Generate Lowercase MAC Addresses (Cloudinit Compatible)
 
 ```bash
-$ ./generate_mac.sh -c lower --count 5
+$ ./genmac -c lower --count 5
 00:50:56:28:6e:35
 00:50:56:3b:c1:87
 00:50:56:0e:14:da
@@ -200,22 +200,22 @@ $ ./generate_mac.sh -c lower --count 5
 
 ```bash
 # Use dash '-' as delimiter between MAC octets
-$ ./generate_mac.sh -d '-'
+$ ./genmac -d '-'
 00-50-56-28-6e-35
 
 # Use dot '.' as delimiter between MAC octets
-$ ./generate_mac.sh -d '.' -n 2
+$ ./genmac -d '.' -n 2
 00.50.56.28.6E.35
 00.50.56.3B.C1.87
 
 # No delimiters between MAC octets (compact format)
-$ ./generate_mac.sh -d none
+$ ./genmac -d none
 005056286e35
 ```
 
 ### Unicast vs Random Lab MACs
 
-- `generate_mac.sh` always generates **unicast** MAC addresses and never produces multicast addresses, because multicast-style MACs are not suitable as normal VM NIC identifiers.
+- `genmac` always generates **unicast** MAC addresses and never produces multicast addresses, because multicast-style MACs are not suitable as normal VM NIC identifiers.
 - When you use `-T vmware` (or omit `-T`), MACs follow VMware’s vendor-style prefix. When you use `-R`, MACs are **random, unicast, locally-administered** and intended for lab/test environments without mimicking any real hardware vendor.
 
 For a short overview of these concepts, see [docs/mac-unicast.md](docs/mac-unicast.md).
@@ -228,7 +228,7 @@ For a short overview of these concepts, see [docs/mac-unicast.md](docs/mac-unica
 
 ---
 
-## generate_sn.sh
+## gensn
 
 ### Purpose
 
@@ -267,21 +267,21 @@ Generates customizable serial numbers for VMware VMs. These serial numbers can b
 #### Basic Usage (Default Settings)
 
 ```bash
-$ ./generate_sn.sh
+$ ./gensn
 VM-A1B2C3
 ```
 
 #### Generate VM Serial Numbers with Mixed Case
 
 ```bash
-$ ./generate_sn.sh -L 9 -c mixed
+$ ./gensn -L 9 -c mixed
 VM-aB3cD4eF5
 ```
 
 #### Generate Debian VM Serial Numbers
 
 ```bash
-$ ./generate_sn.sh -P "VM" -L 4 -S "DEBIAN13" -n 3
+$ ./gensn -P "VM" -L 4 -S "DEBIAN13" -n 3
 VM-1234-DEBIAN13
 VM-5A6B-DEBIAN13
 VM-7C8D-DEBIAN13
@@ -290,7 +290,7 @@ VM-7C8D-DEBIAN13
 #### Generate Production Environment Serial Numbers
 
 ```bash
-$ ./generate_sn.sh -P "DEB" -L 6 -S "PROD" -c mixed -n 2
+$ ./gensn -P "DEB" -L 6 -S "PROD" -c mixed -n 2
 DEB-F71Cn8-PROD
 DEB-B5cz88-PROD
 ```
@@ -298,7 +298,7 @@ DEB-B5cz88-PROD
 #### Generate Server Serial Numbers (Compact Format)
 
 ```bash
-$ ./generate_sn.sh -P "SRV" -L 10 --no-delimiter -c upper -n 2
+$ ./gensn -P "SRV" -L 10 --no-delimiter -c upper -n 2
 SRVD4730MB0WY
 SRVJ7V1V5CSX5
 ```
@@ -306,7 +306,7 @@ SRVJ7V1V5CSX5
 #### Generate Random Identifiers (No Prefix)
 
 ```bash
-$ ./generate_sn.sh --no-prefix -L 8 -c lower -n 2
+$ ./gensn --no-prefix -L 8 -c lower -n 2
 1ct61x80
 8n4d29n4
 ```
@@ -314,7 +314,7 @@ $ ./generate_sn.sh --no-prefix -L 8 -c lower -n 2
 #### Generate Multiple Serial Numbers for Bulk Deployment
 
 ```bash
-$ ./generate_sn.sh -P "HQ" -L 8 -S "LAB" -n 5
+$ ./gensn -P "HQ" -L 8 -S "LAB" -n 5
 HQ-A1B2C3D4-LAB
 HQ-E5F6G7H8-LAB
 HQ-I9J0K1L2-LAB
@@ -325,13 +325,13 @@ HQ-Q7R8S9T0-LAB
 #### Custom Delimiter
 
 ```bash
-$ ./generate_sn.sh -P "VM" -L 6 -d "_" -S "TEST"
+$ ./gensn -P "VM" -L 6 -d "_" -S "TEST"
 VM_A1B2C3_TEST
 ```
 
 ---
 
-## genvm.sh - Unified Wrapper
+## genvm - Unified Wrapper
 
 A single command that can generate MAC addresses, serial numbers, or both.
 Type is automatically detected from the arguments provided.
@@ -340,13 +340,13 @@ Type is automatically detected from the arguments provided.
 
 ```bash
 # Generate MAC addresses
-genvm.sh -n 3 -T vmware
+genvm -n 3 -T vmware
 
 # Generate serial numbers  
-genvm.sh -n 2 -P DEB -L 6 -S PROD
+genvm -n 2 -P DEB -L 6 -S PROD
 
 # Generate both MAC and SN in one command
-genvm.sh -n 2 -T vmware -P VM -L 6
+genvm -n 2 -T vmware -P VM -L 6
 ```
 
 ### Type Detection
@@ -371,22 +371,22 @@ The wrapper automatically detects what to generate based on the arguments:
 
 ```bash
 # Generate 1 VMware MAC address (default with no arguments)
-genvm.sh
+genvm
 
 # Generate 3 VMware MAC addresses
-genvm.sh -n 3 -T vmware -c lower
+genvm -n 3 -T vmware -c lower
 
 # Generate 5 serial numbers for Debian production
-genvm.sh -n 5 -P DEB -L 8 -S PROD -c upper
+genvm -n 5 -P DEB -L 8 -S PROD -c upper
 
 # Generate both for a new VM
-genvm.sh -n 1 -T vmware -P VM -L 8 -c lower
+genvm -n 1 -T vmware -P VM -L 8 -c lower
 
 # Generate MAC with compact format
-genvm.sh -n 1 -T vmware --no-delimiter
+genvm -n 1 -T vmware --no-delimiter
 
 # Generate SN without prefix or suffix
-genvm.sh -n 1 -L 10 --no-prefix --no-suffix
+genvm -n 1 -L 10 --no-prefix --no-suffix
 ```
 
 ---
@@ -403,9 +403,9 @@ chmod +x install.sh   # if not already executable
 
 This will:
 
-- Copy `generate_mac.sh` to `/usr/local/bin/genmac`
-- Copy `generate_sn.sh` to `/usr/local/bin/gensn`
-- Copy `genvm.sh` to `/usr/local/bin/genvm`
+- Copy `genmac` to `/usr/local/bin/genmac`
+- Copy `gensn` to `/usr/local/bin/gensn`
+- Copy `genvm` to `/usr/local/bin/genvm`
 - Overwrite existing commands if they are already present
 
 After installation you can run:
@@ -434,7 +434,7 @@ vms = {
   "debian13-test" = {
     name     = "deb13-test"
     # ... other settings ...
-    "mac_address"     = "00:50:56:28:6e:35"  # From generate_mac.sh (lowercase for cloudinit)
+    "mac_address"     = "00:50:56:28:6e:35"  # From genmac (lowercase for cloudinit)
   }
 }
 ```
@@ -450,7 +450,7 @@ vms = {
   "debian13-test" = {
     name     = "deb13-test"
     # ... other settings ...
-    serial_number = "VM-1717SA-SRV" # From generate_sn.sh
+    serial_number = "VM-1717SA-SRV" # From gensn
   }
 }
 ```
@@ -488,32 +488,32 @@ NB: I ususally used `SMBIOS.use12CharSerialNumber` for my mac VMs.
 
 ```bash
 # Generate 5 MAC addresses for new VMs (lowercase, cloudinit compatible)
-./generate_mac.sh -n 5
+./genmac -n 5
 
 # Generate uppercase MAC addresses
-./generate_mac.sh -c upper -n 3
+./genmac -c upper -n 3
 
 # Generate MAC address in both cases
-./generate_mac.sh -c both
+./genmac -c both
 
 # View all MAC generation options
-./generate_mac.sh --help
+./genmac --help
 
 # Generate serial numbers for Debian production VMs
-./generate_sn.sh -P "DEB" -L 6 -S "PROD" -c upper -n 5
+./gensn -P "DEB" -L 6 -S "PROD" -c upper -n 5
 
 # Generate serial numbers for test environment (compact format)
-./generate_sn.sh -P "TST" -L 8 --no-delimiter -n 3
+./gensn -P "TST" -L 8 --no-delimiter -n 3
 
 # View all serial number options
-./generate_sn.sh --help
+./gensn --help
 ```
 
 ---
 
 ## Deprecation Notices
 
-### generate_sn.sh Argument Changes
+### gensn Argument Changes
 
 The following lowercase options are **deprecated** but still work with a warning message:
 
@@ -527,7 +527,7 @@ The following lowercase options are **deprecated** but still work with a warning
 
 ### Argument Behavior Notes
 
-For `generate_sn.sh`, using `-L`, `-P`, or `-S` with no value is equivalent to their `--no-*` flags:
+For `gensn`, using `-L`, `-P`, or `-S` with no value is equivalent to their `--no-*` flags:
 - `-L` with no value = `--no-delimiter`
 - `-P` with no value = `--no-prefix`
 - `-S` with no value = `--no-suffix`

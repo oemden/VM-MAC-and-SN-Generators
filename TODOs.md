@@ -3,13 +3,13 @@
 ## Project Global
 
 - [x] Create an install script to install scripts in `/usr/local/bin/`
-  - `generate_mac.sh` target alias `/usr/local/bin/genmac`
-  - `generate_sn.sh` target alias  `/usr/local/bin/gensn`
+  - `genmac` target alias `/usr/local/bin/genmac`
+  - `gensn` target alias  `/usr/local/bin/gensn`
   - `genvm.sh` target alias `/usr/local/bin/genvm`
 
 ## Scripts Unification (Phase 1 - COMPLETE)
 
-### generate_mac.sh
+### genmac
 - [x] Add: versioning to scripts
 - [x] Add: Options to scripts
 - [x] Add: `-h` Show help and usage
@@ -22,7 +22,7 @@
 - [x] Enhanced all error messages with standardized format
 - [x] Added conflict detection for `-T` + `-R`
 
-### generate_sn.sh
+### gensn
 - [x] Add: versioning to scripts
 - [x] Add: `-h` Show help and usage
 - [x] Add: `-c`, --case TYPE Character case: upper, lower, mixed (default: upper)
@@ -67,8 +67,8 @@
 ## Documentation
 
 - [x] Update README.md with genvm.sh section
-- [x] Update README.md generate_mac.sh options
-- [x] Update README.md generate_sn.sh options
+- [x] Update README.md genmac options
+- [x] Update README.md gensn options
 - [x] Update README.md examples
 - [x] Update README.md Installation section
 - [x] Add README.md Deprecation Notices section
@@ -77,7 +77,7 @@
 
 ## Backlog
 
-### generate_mac.sh
+### genmac
 - [ ] Add: .env / $ENV / config file `~/.genvmmacsn/{genmac.cfg,gensn.cfg}` options to set custom user defaults
   - [ ] User `$ENV` (used when calling script from /usr/local/bin/*.sh)
   - [ ] `.env` for App project (to come)

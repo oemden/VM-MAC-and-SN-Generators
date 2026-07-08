@@ -3,7 +3,7 @@
 **Status:** Draft  
 **Author:** Mistral Vibe  
 **Date:** 2026-07-08  
-**Target:** Unified interface for generate_mac.sh and generate_sn.sh, then wrapper  
+**Target:** Unified interface for genmac and gensn, then wrapper  
 **Branch:** `feature/script-unification`  
 **Worktree:** Required for isolated development  
 
@@ -61,13 +61,13 @@ git worktree remove ../worktree-script-unification
 
 ### Current Issues in Existing Scripts
 
-#### generate_mac.sh (v0.4.0)
+#### genmac (v0.4.0)
 | Issue | Severity | Current Behavior | Fix |
 |-------|----------|------------------|-----|
 | Missing --no-delimiter | Medium | N/A | Add flag |
 | Target validation | Low | Accepts only vmware | Document limitation |
 
-#### generate_sn.sh (v0.4.0)
+#### gensn (v0.4.0)
 | Issue | Severity | Current Behavior | Fix |
 |-------|----------|------------------|-----|
 | Lowercase type-specific | High | -l, -p, -s | Rename to -L, -P, -S |
@@ -107,7 +107,7 @@ git worktree remove ../worktree-script-unification
 | No-prefix | N/A | ✗ | ✓ | ✗ | ✓ | SN-specific |
 | No-suffix | N/A | ✗ | ✗ | ✗ | **`--no-suffix`** | **NEW** |
 
-### 4.2 generate_mac.sh - Changes
+### 4.2 genmac - Changes
 
 #### Change 1: Add --no-delimiter
 ```bash
@@ -130,7 +130,7 @@ if [[ "$RANDOM_LAB" -eq 1 && "$TARGET" != "vmware" ]]; then
 fi
 ```
 
-### 4.3 generate_sn.sh - Changes
+### 4.3 gensn - Changes
 
 #### Change 1: Add USE_SUFFIX variable
 ```bash
@@ -354,7 +354,7 @@ Error: Conflicting options -P and --no-prefix
 
 ## 6. Error Handling Implementation Guide
 
-### 6.1 generate_mac.sh Error Handling
+### 6.1 genmac Error Handling
 
 ```bash
 # Validate case option
@@ -405,7 +405,7 @@ if [[ "$RANDOM_LAB" -eq 1 && "$TARGET" != "vmware" ]]; then
 fi
 ```
 
-### 6.2 generate_sn.sh Error Handling
+### 6.2 gensn Error Handling
 
 ```bash
 # Validate length option
@@ -452,7 +452,7 @@ fi
 Add after argument parsing in both scripts:
 
 ```bash
-# For generate_sn.sh
+# For gensn
 if [[ $USE_PREFIX -eq 0 && [[ " ${ORIG_ARGS[@]} " =~ " -P " ]]]; then
     echo "Error: Conflicting options -P and --no-prefix" >&2
     echo "  Input: -P with --no-prefix" >&2
@@ -488,7 +488,7 @@ fi
 - [ ] Review current scripts thoroughly
 - [ ] Verify all test cases in current scripts pass
 
-### Phase 1: generate_mac.sh
+### Phase 1: genmac
 - [ ] Add `--no-delimiter` flag
 - [ ] Enhance error messages (all validation points)
 - [ ] Add conflicting option detection
@@ -496,7 +496,7 @@ fi
 - [ ] Run all test cases (Section 5)
 - [ ] Fix any failures
 
-### Phase 1: generate_sn.sh
+### Phase 1: gensn
 - [ ] Add `USE_SUFFIX=1` default
 - [ ] Change `-l` → `-L` (primary)
 - [ ] Change `-p` → `-P` (primary)
@@ -514,8 +514,8 @@ fi
 - [ ] Fix any failures
 
 ### Phase 1: README.md
-- [ ] Update generate_mac.sh options section
-- [ ] Update generate_sn.sh options section
+- [ ] Update genmac options section
+- [ ] Update gensn options section
 - [ ] Document new uppercase options
 - [ ] Document deprecated options
 - [ ] Document no-value behavior
@@ -548,11 +548,11 @@ fi
 ```
 Phase 1: Update Scripts (REQUIRED)
 ├── Branch + Worktree Setup
-├── generate_mac.sh Updates
+├── genmac Updates
 │   ├── Add --no-delimiter
 │   ├── Enhance error handling
 │   └── Update help text
-├── generate_sn.sh Updates
+├── gensn Updates
 │   ├── Rename to uppercase (-L, -P, -S)
 │   ├── Add --no-suffix
 │   ├── Fix no-value behaviors
@@ -579,12 +579,12 @@ Phase 2: Wrapper (OPTIONAL)
 ## 9. Success Criteria
 
 ### Phase 1 (Required - Must All Pass)
-- [ ] generate_mac.sh has --no-delimiter support
-- [ ] generate_mac.sh has clear error messages
-- [ ] generate_sn.sh uses -L, -P, -S (uppercase)
-- [ ] generate_sn.sh has --no-suffix
-- [ ] generate_sn.sh fixes no-value behavior for -d, -p, -s
-- [ ] generate_sn.sh has deprecated aliases with warnings
+- [ ] genmac has --no-delimiter support
+- [ ] genmac has clear error messages
+- [ ] gensn uses -L, -P, -S (uppercase)
+- [ ] gensn has --no-suffix
+- [ ] gensn fixes no-value behavior for -d, -p, -s
+- [ ] gensn has deprecated aliases with warnings
 - [ ] Both scripts have enhanced error handling
 - [ ] All 45 test cases pass
 - [ ] README.md updated
@@ -615,8 +615,8 @@ Phase 2: Wrapper (OPTIONAL)
 ## 11. Appendix
 
 ### Current Script Locations
-- `scripts/generate_mac.sh` - 208 lines
-- `scripts/generate_sn.sh` - 174 lines
+- `scripts/genmac` - 208 lines
+- `scripts/gensn` - 174 lines
 
 ### Test Commands Reference
 ```bash
@@ -624,23 +624,23 @@ Phase 2: Wrapper (OPTIONAL)
 cd /path/to/VM-MAC-and-SN-Generators
 
 # Test MAC script
-./scripts/generate_mac.sh -n 3 -c lower -d ':' -T vmware
-./scripts/generate_mac.sh -R -n 1
-./scripts/generate_mac.sh --no-delimiter -n 1
+./scripts/genmac -n 3 -c lower -d ':' -T vmware
+./scripts/genmac -R -n 1
+./scripts/genmac --no-delimiter -n 1
 
 # Test SN script
-./scripts/generate_sn.sh -L 6 -P DEB -S PROD -c upper -n 2
-./scripts/generate_sn.sh --no-prefix -L 8 -n 1
-./scripts/generate_sn.sh --no-suffix -L 6 -n 1
-./scripts/generate_sn.sh -d . -n 1
-./scripts/generate_sn.sh -d -n 1  # Should = --no-delimiter
-./scripts/generate_sn.sh -p -n 1  # Should = --no-prefix
-./scripts/generate_sn.sh -s -n 1  # Should = --no-suffix
+./scripts/gensn -L 6 -P DEB -S PROD -c upper -n 2
+./scripts/gensn --no-prefix -L 8 -n 1
+./scripts/gensn --no-suffix -L 6 -n 1
+./scripts/gensn -d . -n 1
+./scripts/gensn -d -n 1  # Should = --no-delimiter
+./scripts/gensn -p -n 1  # Should = --no-prefix
+./scripts/gensn -s -n 1  # Should = --no-suffix
 
 # Test error cases
-./scripts/generate_mac.sh -c invalid 2>&1 | head -4  # Check error format
-./scripts/generate_sn.sh -n 0 2>&1 | head -4
-./scripts/generate_sn.sh -L 0 2>&1 | head -4
+./scripts/genmac -c invalid 2>&1 | head -4  # Check error format
+./scripts/gensn -n 0 2>&1 | head -4
+./scripts/gensn -L 0 2>&1 | head -4
 ```
 
 ### Worktree Commands

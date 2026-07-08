@@ -8,7 +8,7 @@ show_help() {
 Usage: $0 [MAC_OPTIONS | SN_OPTIONS | COMMON_OPTIONS]
 
 Generate MAC addresses, serial numbers, or both for VMware VMs.
-Type is auto-detected from arguments. With no arguments, generates 1 MAC address.
+Type is auto-detected from arguments. With no arguments, generates 1 MAC + SN.
 
 Default behavior (no arguments):
   Generates 1 VMware MAC address and 1 serial number (same as: genmac + gensn with no arguments)
@@ -40,7 +40,7 @@ TYPE DETECTION:
     Both: MAC + SN options
 
 EXAMPLES:
-    # Generate 1 VMware MAC address (default with no arguments)
+    # Generate 1 MAC + SN (default with no arguments)
     $0
 
     # Generate 3 VMware MAC addresses
