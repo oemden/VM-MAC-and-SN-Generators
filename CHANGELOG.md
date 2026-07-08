@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added - Web App (Phase 4C)
+
+- VMs page at `/vms`: list VMs, delete button per row
+- VmDeleteModal: custom modal when VM has associated results; options: Keep results (orphan), Delete all (cascade), Cancel
+- Nav: VMs link in header
+
+### Added - API (Phase 4C)
+
+- DELETE /api/vms/:id — 204 on success, 404 if not found; `?cascade=true` to delete associated results
+- GET /api/vms: `associated_count` per VM (number of linked saved results)
+
+### Documentation
+
+- docs/plans: 2025-02-19-vm-delete-phase04c-design.md
+- README: VMs page section
+- UserStories: US-059 updated for cascade option
+
 ## [0.7.0] - 2026-02-19
 
 ### Added - Web App
